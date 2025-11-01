@@ -1,0 +1,169 @@
+\documentclass[12pt]{article}
+
+%=============== PAQUETES Y CONFIGURACIÓN ===============
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+
+% Configuración de márgenes
+\geometry{a4paper, margin=1in}
+
+% Configuración para bloques de código
+\lstset{
+	language=bash,
+	basicstyle=\ttfamily\small,
+	backgroundcolor=\color{black!5},
+	frame=single,
+	rulecolor=\color{black},
+	breaklines=true,
+	postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+}
+
+% Comandos personalizados
+\newcommand{\E}{\mathbb{E}}
+
+%=============== TÍTULO DEL DOCUMENTO ===============
+\title{El Método Monte Carlo para la Evaluación de Integrales \\ \large Un Análisis Detallado Basado en "Simulación" de S. M. Ross}
+\author{Explicación generada por IA}
+\date{\today}
+
+%=============== INICIO DEL DOCUMENTO ===============
+\begin{document}
+	
+	\maketitle
+	
+	\begin{abstract}
+		Este artículo ofrece una explicación detallada del método de Monte Carlo para la evaluación de integrales, una técnica fundamental en el campo de la simulación. Se explora el concepto central de representar una integral como un valor esperado, el algoritmo básico para integrales en el intervalo unitario, y se profundiza en la técnica de cambio de variable para extender el método a intervalos arbitrarios. El análisis se complementa con un ejemplo numérico concreto y una mención a sus aplicaciones en problemas multidimensionales.
+	\end{abstract}
+	
+	\section{Introducción}
+	En muchas áreas de la ciencia y la ingeniería, nos enfrentamos al desafío de calcular integrales definidas, especialmente aquellas que son analíticamente complejas o de alta dimensionalidad. El método de Monte Carlo ofrece una solución ingeniosa y potente a este problema, transformando un problema de cálculo en uno de estadística a través de la simulación y el uso de números aleatorios.
+	
+	\section{El Concepto Fundamental: La Integral como Valor Esperado}
+	El pilar del método de Monte Carlo para la integración es la reinterpretación de una integral definida como el valor esperado de una función de una variable aleatoria.
+	
+	Consideremos la tarea de calcular la integral de una función \(g(x)\) en el intervalo unitario \([0, 1]\):
+	\begin{equation}
+		\theta = \int_{0}^{1} g(x) \,dx
+	\end{equation}
+	
+	Ahora, supongamos que tenemos una variable aleatoria \(U\) que sigue una distribución uniforme en el intervalo \((0, 1)\). La función de densidad de probabilidad (FDP) de \(U\), denotada como \(f_U(u)\), es igual a 1 para \(u \in (0, 1)\) y 0 en cualquier otro caso.
+	
+	El valor esperado de la función \(g(U)\) se define como:
+	\begin{equation}
+		\E[g(U)] = \int_{-\infty}^{\infty} g(u)f_U(u) \,du = \int_{0}^{1} g(u) \cdot 1 \,du = \int_{0}^{1} g(u) \,du
+	\end{equation}
+	Como podemos ver, \(\E[g(U)] = \theta\). Esta equivalencia es la clave de todo el método.
+	
+	\section{El Algoritmo de Monte Carlo para el Intervalo Unitario}
+	Una vez que establecemos que \(\theta = \E[g(U)]\), podemos invocar la **Ley Fuerte de los Grandes Números**. Esta ley nos asegura que si generamos una secuencia de variables aleatorias \(U_1, U_2, \dots, U_k\) independientes e idénticamente distribuidas (en este caso, uniformes en \((0, 1)\)), el promedio de la función evaluada en estos puntos convergerá al valor esperado.
+	
+	El algoritmo práctico es el siguiente:
+	\begin{enumerate}
+		\item Generar un gran número, \(k\), de números aleatorios \(u_1, u_2, \dots, u_k\) de una distribución uniforme en \((0, 1)\).
+		\item Evaluar la función \(g\) en cada uno de estos números para obtener \(g(u_1), g(u_2), \dots, g(u_k)\).
+		\item Calcular el promedio de estos valores. Esta media muestral es nuestra aproximación de \(\theta\).
+	\end{enumerate}
+	\begin{equation}
+		\hat{\theta} = \frac{1}{k} \sum_{i=1}^{k} g(u_i) \approx \theta
+	\end{equation}
+	Cuanto mayor sea el número de muestras \(k\), más precisa será, en general, nuestra aproximación.
+	
+	\section{Extendiendo el Método: Integrales en un Intervalo Arbitrario [a, b]}
+	El método básico funciona para el intervalo \([0, 1]\), pero la mayoría de las integrales de interés se definen en otros intervalos. Aquí es donde la técnica de **cambio de variable** se vuelve fundamental.
+	
+	\subsection{El Problema}
+	Queremos calcular la siguiente integral:
+	\begin{equation}
+		\theta = \int_{a}^{b} g(x) \,dx
+	\end{equation}
+	No podemos aplicar directamente el método anterior, ya que nuestros números aleatorios \(U\) están en \((0, 1)\), mientras que nuestra variable de integración \(x\) está en \([a, b]\).
+	
+	\subsection{La Solución: El Cambio de Variable}
+	El objetivo es transformar la integral en \([a, b]\) a una integral equivalente en \([0, 1]\).
+	
+	\paragraph{Paso 1: Establecer la relación entre las variables.}
+	Buscamos una nueva variable \(y\) tal que cuando \(x\) se mueva de \(a\) a \(b\), \(y\) se mueva de 0 a 1. Una transformación lineal simple logra esto:
+	\begin{equation}
+		y = \frac{x - a}{b - a}
+	\end{equation}
+	Despejando \(x\), obtenemos la relación inversa, que nos permitirá sustituir \(x\) en la función \(g(x)\):
+	\begin{equation}
+		x = a + (b - a)y
+	\end{equation}
+	
+	\paragraph{Paso 2: Transformar el diferencial.}
+	Al cambiar la variable de integración, también debemos cambiar el diferencial. Diferenciamos la ecuación para \(x\) con respecto a \(y\):
+	\begin{equation}
+		\frac{dx}{dy} = b - a \implies dx = (b - a) \,dy
+	\end{equation}
+	
+	\paragraph{Paso 3: Reconstruir la integral.}
+	Sustituimos \(x\), \(dx\) y los límites de integración en la integral original:
+	\begin{align*}
+		\theta &= \int_{a}^{b} g(x) \,dx \\
+		&= \int_{0}^{1} g\left(a + (b - a)y\right) (b - a) \,dy
+	\end{align*}
+	Observe cómo los límites de integración ahora son 0 y 1.
+	
+	\paragraph{Paso 4: Aplicar el método de Monte Carlo.}
+	Hemos convertido exitosamente la integral original en una sobre el intervalo unitario. Ahora definimos una nueva función, \(h(y)\):
+	\begin{equation}
+		h(y) = (b - a) \cdot g(a + (b - a)y)
+	\end{equation}
+	Nuestra integral se convierte en:
+	\begin{equation}
+		\theta = \int_{0}^{1} h(y) \,dy = \E[h(U)]
+	\end{equation}
+	Ahora podemos aplicar el algoritmo de Monte Carlo original a esta nueva función \(h(y)\). La aproximación será:
+	\begin{equation}
+		\hat{\theta} = \frac{1}{k} \sum_{i=1}^{k} h(u_i) = \frac{b-a}{k} \sum_{i=1}^{k} g(a + (b-a)u_i)
+	\end{equation}
+	
+	\section{Ejemplo Numérico Detallado}
+	Vamos a aproximar el valor de la integral \(\theta = \int_{2}^{4} x^2 \,dx\).
+	
+	\begin{itemize}
+		\item La función es \(g(x) = x^2\).
+		\item Los límites son \(a = 2\) y \(b = 4\).
+		\item La longitud del intervalo es \(b - a = 2\).
+	\end{itemize}
+	
+	Primero, definimos nuestra nueva función \(h(y)\) para el intervalo \([0, 1]\):
+	\[ h(y) = (b - a) \cdot g(a + (b - a)y) = 2 \cdot g(2 + 2y) = 2 \cdot (2 + 2y)^2 \]
+	
+	Ahora, simulamos el proceso:
+	\begin{enumerate}
+		\item Generamos un número aleatorio \(u_1 = 0.1\). \\
+		\(h(0.1) = 2 \cdot (2 + 2 \cdot 0.1)^2 = 2 \cdot (2.2)^2 = 2 \cdot 4.84 = 9.68\).
+		\item Generamos \(u_2 = 0.8\). \\
+		\(h(0.8) = 2 \cdot (2 + 2 \cdot 0.8)^2 = 2 \cdot (3.6)^2 = 2 \cdot 12.96 = 25.92\).
+		\item Generamos \(u_3 = 0.5\). \\
+		\(h(0.5) = 2 \cdot (2 + 2 \cdot 0.5)^2 = 2 \cdot (3)^2 = 2 \cdot 9 = 18.0\).
+	\end{enumerate}
+	
+	Con solo estas tres muestras, nuestra estimación de \(\theta\) sería:
+	\[ \hat{\theta} = \frac{9.68 + 25.92 + 18.0}{3} = \frac{53.6}{3} \approx 17.87 \]
+	El valor analítico exacto es:
+	\[ \int_{2}^{4} x^2 \,dx = \left[ \frac{x^3}{3} \right]_{2}^{4} = \frac{4^3}{3} - \frac{2^3}{3} = \frac{64 - 8}{3} = \frac{56}{3} \approx 18.67 \]
+	Nuestra aproximación con solo tres puntos es razonablemente cercana. Con miles o millones de puntos, la estimación sería mucho más precisa.
+	
+	\section{Otras Aplicaciones y Extensiones}
+	La verdadera fortaleza del método Monte Carlo se manifiesta en problemas más complejos.
+	
+	\subsection{Integrales Múltiples}
+	El método se extiende de forma natural a integrales de múltiples dimensiones. Para una integral n-dimensional, se generan conjuntos de \(n\) números aleatorios y se promedian los resultados, una tarea que sería casi imposible de realizar con métodos numéricos tradicionales como la regla del trapecio.
+	
+	\subsection{Un Ejemplo Clásico: La Estimación de \(\pi\)}
+	Como se describe en el libro de Ross, se pueden generar puntos aleatorios en un cuadrado que inscribe un círculo. La proporción de puntos que caen dentro del círculo está directamente relacionada con \(\pi/4\). Este ejemplo ilustra de manera geométrica e intuitiva el poder de usar la probabilidad para resolver un problema determinista.
+	
+	\section{Conclusión}
+	El método Monte Carlo para evaluar integrales es una herramienta extraordinariamente versátil. Su fundamento, que consiste en expresar una integral como un valor esperado, permite resolver problemas complejos de forma relativamente sencilla mediante la simulación. La técnica del cambio de variable es un paso esencial que generaliza el método, permitiendo su aplicación a cualquier intervalo finito y demostrando la flexibilidad de este enfoque probabilístico.
+	
+\end{document}

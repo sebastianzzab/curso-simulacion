@@ -1,0 +1,88 @@
+
+\documentclass[12pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\lstdefinestyle{Rstyle}{
+    language=R,
+    backgroundcolor=\color{gray!10},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    showstringspaces=false,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray!70},
+    stringstyle=\color{orange!90!black}
+}
+\lstset{style=Rstyle}
+
+\title{Fijar la Semilla en R: Reproducibilidad en Simulación}
+\author{Sebastián Ernesto Zabala Zabala}
+\date{Octubre 2025}
+
+\begin{document}
+
+\maketitle
+
+\section*{Introducción}
+En simulación y modelado estadístico, la reproducibilidad de los resultados es un aspecto fundamental. En R, esta se garantiza mediante el uso de la función \texttt{set.seed()}, que permite fijar la semilla del generador de números aleatorios.
+
+\section*{Funcionamiento de \texttt{set.seed()}}
+La función \texttt{set.seed()} inicializa el generador de números aleatorios, asegurando que la secuencia generada sea la misma cada vez que se ejecute el código. Esto permite reproducir experimentos y garantizar la consistencia de los resultados.
+
+\begin{lstlisting}[language=R]
+set.seed(1)
+rnorm(5)
+# [1] -0.6264538  0.1836433 -0.8356286  1.5952808  0.3295078
+\end{lstlisting}
+
+\section*{Ejemplo práctico}
+Si ejecutamos el siguiente código sin establecer una semilla, los resultados variarán cada vez:
+
+\begin{lstlisting}[language=R]
+rnorm(5)
+\end{lstlisting}
+
+Sin embargo, al fijar la semilla, los resultados serán idénticos en cada ejecución:
+
+\begin{lstlisting}[language=R]
+set.seed(123)
+rnorm(5)
+# [1] -0.5604756 -0.2301775  1.5587083  0.0705084  0.1292877
+\end{lstlisting}
+
+\section*{Uso avanzado}
+También es posible utilizar variables dinámicas como la hora del sistema para generar semillas únicas en cada ejecución:
+
+\begin{lstlisting}[language=R]
+set.seed(as.numeric(Sys.time()))
+rnorm(5)
+\end{lstlisting}
+
+Este enfoque es útil cuando se desea asegurar aleatoriedad sin reproducibilidad.
+
+\section*{Importancia en simulación}
+En experimentos de simulación, fijar la semilla es crucial para comparar métodos o verificar resultados. Por ejemplo, al realizar replicaciones Monte Carlo, se recomienda fijar una semilla al inicio de cada iteración o experimento.
+
+\begin{lstlisting}[language=R]
+set.seed(100)
+n_rep <- 1000
+n <- 30
+Mediana <- numeric(n_rep)
+
+for (i in 1:n_rep) {
+  Mediana[i] <- median(runif(n))
+}
+
+mean(Mediana)
+\end{lstlisting}
+
+\section*{Conclusión}
+El uso de \texttt{set.seed()} es una práctica esencial para cualquier estadístico o científico de datos que trabaje con simulaciones. Garantiza reproducibilidad, transparencia y rigor en el proceso analítico.
+
+\end{document}

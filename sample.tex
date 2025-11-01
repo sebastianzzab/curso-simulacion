@@ -1,0 +1,99 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\lstdefinestyle{Rstyle}{
+	language=R,
+	backgroundcolor=\color{gray!10},
+	basicstyle=\ttfamily\small,
+	breaklines=true,
+	frame=single,
+	showstringspaces=false,
+	keywordstyle=\color{blue},
+	commentstyle=\color{gray!70},
+	stringstyle=\color{orange!90!black}
+}
+\lstset{style=Rstyle}
+
+\title{La función \texttt{sample()} en R: muestreo aleatorio y permutaciones}
+\author{Adaptado del tutorial de R-Coder}
+\date{}
+
+\begin{document}
+	\maketitle
+	
+	\section*{Introducción}
+	La función \texttt{sample()} en R permite crear \emph{muestras aleatorias} o \emph{permutaciones} de un vector o lista, ya sea con o sin reemplazo, e incluso basadas en probabilidades asignadas a cada elemento. :contentReference[oaicite:2]{index=2}  
+	Es una herramienta fundamental en simulación, muestreo estadístico y análisis de datos en el que la aleatoriedad juega un papel clave.
+	
+	\section{Sintaxis de \texttt{sample()}}
+	La forma general de la función es:
+	\begin{lstlisting}[language=R]
+		sample(x, size, replace = FALSE, prob = NULL)
+	\end{lstlisting}
+	Donde los argumentos significan:
+	\begin{itemize}
+		\item \texttt{x}: vector o lista que contiene los elementos de los que se va a seleccionar. :contentReference[oaicite:3]{index=3}  
+		\item \texttt{size}: número de elementos a seleccionar. Si \texttt{replace = TRUE}, puede ser mayor que la longitud de \texttt{x}. :contentReference[oaicite:4]{index=4}  
+		\item \texttt{replace}: valor lógico que indica si el muestreo será con reemplazo (\texttt{TRUE}) o sin reemplazo (\texttt{FALSE}). Por defecto es \texttt{FALSE}. :contentReference[oaicite:5]{index=5}  
+		\item \texttt{prob}: un vector de pesos de probabilidad opcionales para cada elemento de \texttt{x}. :contentReference[oaicite:6]{index=6}  
+	\end{itemize}
+	
+	\section{Muestreo sin reemplazo}
+	Por defecto (\texttt{replace = FALSE}), \texttt{sample(x)} devuelve una \emph{permutación} aleatoria de los elementos de \texttt{x}, es decir, los mismos valores en otro orden. :contentReference[oaicite:7]{index=7}  
+	\begin{lstlisting}[language=R]
+		x <- 1:10
+		sample(x)
+	\end{lstlisting}
+	También puede especificarse un tamaño menor usando el argumento \texttt{size}:
+	\begin{lstlisting}[language=R]
+		sample(x, size = 1)
+	\end{lstlisting}
+	Si se pide un tamaño mayor que la longitud de \texttt{x} sin reemplazo, se generará un error:  
+	\begin{lstlisting}[language=R]
+		sample(x, size = 15)
+		# Error in sample.int(length(x), size, replace, prob) :
+		#   cannot take a sample larger than the population when 'replace = FALSE'
+	\end{lstlisting} :contentReference[oaicite:8]{index=8}
+	
+	\section{Muestreo con reemplazo}
+	Cuando \texttt{replace = TRUE}, el muestreo permite que los elementos seleccionados puedan repetirse. Por tanto el tamaño de la muestra puede exceder la longitud de \texttt{x}. :contentReference[oaicite:9]{index=9}  
+	\begin{lstlisting}[language=R]
+		x <- 1:10
+		sample(x, replace = TRUE)
+		sample(x, size = 15, replace = TRUE)
+	\end{lstlisting}
+	
+	\section{Muestreo ponderado (weighted sampling)}
+	Al especificar el argumento \texttt{prob}, cada elemento de \texttt{x} puede tener una probabilidad distinta de ser seleccionado. Esto permite modelar escenarios más realistas en los que los elementos no tienen probabilidades iguales. :contentReference[oaicite:10]{index=10}  
+	\begin{lstlisting}[language=R]
+		sample(c("A","B"), size = 10, replace = TRUE, prob = c(0.8,0.2))
+	\end{lstlisting}
+	A medida que el tamaño de la muestra crece, las proporciones observadas tienden a acercarse a las probabilidades especificadas.
+	
+	\section{Casos de uso prácticos adicionales}
+	\subsection*{Muestras reproducibles}
+	Para garantizar que los resultados sean reproducibles, es buena práctica fijar una semilla antes de usar \texttt{sample()}.  
+	\begin{lstlisting}[language=R]
+		set.seed(1)
+		sample(1:10)
+	\end{lstlisting} :contentReference[oaicite:11]{index=11}
+	
+	\subsection*{Selección de filas en un data frame}
+	Es habitual usar \texttt{sample()} para seleccionar aleatoriamente filas de un data frame. Por ejemplo:
+	\begin{lstlisting}[language=R]
+		set.seed(21)
+		df <- data.frame(x = 1:10, y = rnorm(10))
+		df[sample(1:nrow(df), size = 5), ]
+	\end{lstlisting} :contentReference[oaicite:12]{index=12}
+	
+	\section*{Conclusión}
+	La función \texttt{sample()} es una herramienta versátil para generar permutaciones o muestras aleatorias, ya sea con o sin reemplazo, y con posibilidad de ponderación.  
+	Su uso correcto —junto con la fijación de semilla cuando se requiere reproducibilidad— es esencial para estudios de simulación, análisis estadístico y muestreo en R.
+	
+\end{document}
