@@ -1,0 +1,245 @@
+---
+title: "Generación de números pseudoaleatorios mediante el método de los cuadrados medios"
+author: ["Luis Ríos", "Sebastian Zabala"]
+date: 2025-11-04
+lang: es
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    self-contained: true
+editor: visual
+---
+
+# Importancia de los números pseudoaleatorios
+
+<p style="text-align: justify;">Los números pseudoaleatorios son fundamentales en diversas áreas de la informática y las matemáticas, incluyendo simulaciones, criptografía, juegos y algoritmos de optimización. A diferencia de los números verdaderamente aleatorios, que se generan a partir de fenómenos físicos impredecibles, los números pseudoaleatorios se generan mediante algoritmos deterministas que producen secuencias de números que imitan las propiedades estadísticas de los números aleatorios.</p>
+
+# Métodos comunes para generar números pseudoaleatorios
+Existen varios métodos para generar números pseudoaleatorios, entre los cuales destacan:
+
+1. **Generadores Congruenciales Lineales (LCG)**: Este es uno de los métodos más simples y ampliamente utilizados. Utiliza una fórmula matemática para generar una secuencia de números basada en una semilla inicial. La fórmula general es:
+   $$
+   \begin{equation*}
+   X_{n+1} = (aX_n + c) \mod m
+   \end{equation*}
+   $$
+   donde $(X)$ es el número pseudoaleatorio, ($a$), ($c$) y ($m$) son constantes, y ($X_0$) es la semilla inicial.
+2. **Generadores de Mersenne Twister**: Este es un generador de números pseudoaleatorios más avanzado que ofrece una mayor calidad y un período más largo que los LCG. Es ampliamente utilizado en aplicaciones científicas y de simulación.
+3. **Generadores basados en hardware**: Algunos sistemas utilizan fuentes de entropía física, como ruido térmico o movimientos del mouse, para generar números aleatorios. Aunque estos no son estrictamente pseudoaleatorios, a menudo se combinan con métodos algorítmicos para mejorar la calidad de los números generados.
+
+# Método de los Cuadrados Medios
+
+<p style="text-align: justify;">Uno de los métodos clásicos para generar números pseudoaleatorios es el **método de los cuadrados medios**. Siendo uno de los primeros métodos propuestos históricamente para la generación de números pseudoaleatorios, introducido por John von Neumann en 1946. A pesar de que hoy en día se considera un método con limitaciones importantes en cuanto a la calidad de las secuencias que produce, resulta útil para fines didácticos, pues permite comprender de forma clara cómo un algoritmo determinista puede generar una secuencia de valores a partir de una semilla inicial.</p>
+
+## Pasos para aplicar el método de los cuadrados medios
+Este método implica los siguientes pasos: <br>
+i. Se escoge un número de cuatro dígitos $x_0$ (semilla). <br> 
+ii. Se eleva al cuadrado ($x_0^2$) y se toman los cuatro dígitos centrales ($x_1$).<br> 
+iii. Se genera el el número pseudo-aleatorio como
+$$
+\begin{equation*}
+u_1 = \frac{x_1}{10^4}
+\end{equation*}
+$$
+iv. Volver al paso ii y repetir el proceso. <br>
+Para obtener los $k$ (número par) dígitos centrales de $x_i^2$ se puede utilizar que:
+$$
+\begin{equation*}
+x_{i+1} = \left\lfloor \left( x_i^2 - \left\lfloor \frac{x_i^2}{10^{\left(2k - \frac{k}{2}\right)}} \right\rfloor 10^{\left(2k - \frac{k}{2}\right)} \right) / 10^{\frac{k}{2}} \right\rfloor
+\end{equation*}
+$$
+
+## Implementación del método de los cuadrados medios en <span style="color: blue;">R</span>
+
+#### Ejemplo con semilla 1234 y 100 valores utilizando el paquete `simres`
+
+<p style="text-align: justify;">Para ejemplificar el funcionamiento del método de los cuadrados medios, se generarán 100 números pseudoaleatorios utilizando una semilla inicial de 1234 ($x_0=1234$) con $k=4$ dígitos centrales. Todo esto usando la función `simres::rvng()` del paquete `simres`.</p>
+
+```{r}
+#| label: ejemplo_mid_square
+#| echo: true
+#| warning: false
+#| message: false
+library(simres)
+simres::rvng(100, 1234) 
+```
+<p style="text-align: justify;">Como se puede observar, llegado un punto de la secuencia, los números generados son todos ceros (0). Relevando asi uno de los principales problemas del método de cuadrados medios, **la absorción**. El problema es que si en algún paso se obtiene un número pequeño (pocos dígitos), al rellenar con ceros y tomar los dígitos centrales se pueden sacar muchos ceros, llegando asi a cero (0). Y si $x_n=0$, entonces $x_{n+1}=0$ para siempre.</p>
+
+::: {.callout-warning}
+**Advertencia:** El método de los cuadrados medios puede degenerar rápidamente al valor 0.
+:::
+
+<p style="text-align: justify;">A continuación se muestran las operaciones específicas que provocan la caída de la secuencia hacia el cero. Consideremos el punto de la secuencia en el que comienzan a aparecer valores pequeños, lo cual desencadena la absorción:</p>
+
+$$
+x_{53} = 3317
+$$
+
+**1. Primer paso**
+
+$$
+x_{53}^2 = 3317^2 = 11002489
+$$
+
+Tomando los dígitos centrales:
+
+$$
+11002489 \Rightarrow \boxed{0024}
+$$
+
+$$
+x_{54} = 0024 = 24
+$$
+
+**2. Segundo paso**
+
+$$
+x_{54}^2 = 24^2 = 576
+$$
+
+Tomando los dígitos centrales:
+
+$$
+00000576 \Rightarrow \boxed{0005}
+$$
+
+$$
+x_{55} = 0005 = 5
+$$
+
+**3. Tercer paso**
+
+$$
+x_{55}^2 = 5^2 = 25
+$$
+
+Tomando los dígitos centrales:
+
+$$
+00000025 \Rightarrow \boxed{0000}
+$$
+
+$$
+x_{56} = 0000 = 0
+$$
+
+A partir de aquí, la secuencia queda atrapada en un **estado absorbente**:
+
+$$
+x_{57} = 0 \Rightarrow x_{58} = 0 \Rightarrow x_{59} = 0 \Rightarrow \dots
+$$
+
+Lo que confirma que, una vez que el método alcanza \(0\), no es posible recuperar valores distintos de cero, perdiéndose completamente la utilidad del generador.
+
+#### Ejemplo con semilla 1234 y 100 valores utilizando función propia
+<p style="text-align: justify;">A continuación, se presenta una implementación propia del método de los cuadrados medios en R para generar 100 números pseudoaleatorios a partir de una semilla inicial de 1234.</p>
+
+```{r}
+#| label: mid_square_function
+#| echo: true
+#| warning: false
+#| message: false
+cuadrados_medios <- function(n,
+                             seed = as.numeric(Sys.time()),
+                             k = 4,
+                             save_seed = TRUE,
+                             warn = TRUE) {
+  # n: cantidad de números a generar
+  # seed: semilla inicial (entero o numérico). Se truncará y reducirá modulo 10^k.
+  # k: número de dígitos centrales (debe ser par)
+  # save_seed: si TRUE guarda .rng en globalenv() (semilla final y parámetros)
+  # warn: si TRUE muestra advertencias sobre precisión
+  
+  if (!is.numeric(n) || n <= 0) stop("n debe ser un entero positivo")
+  if ((k %% 2) != 0) stop("k debe ser par")
+  if (!is.numeric(seed)) seed <- as.numeric(seed)
+  
+  # normalizar semilla: usar solo sus últimos k dígitos
+  seed <- floor(seed)
+  seed <- seed %% (10^k)
+  
+  # parámetros para extracción por módulo (idénticos al fragmento de simres)
+  halfk <- k / 2
+  aux   <- 10^(2*k - halfk)  # = 10^(2k - k/2)  (entero si k par)
+  aux2  <- 10^halfk          # = 10^(k/2)
+  
+  # chequeo de precisión: si z = seed^2 puede exceder la precisión entera segura
+  # doble precisión en R mantiene enteros exactos hasta ~2^53 (~9e15).
+  if (warn) {
+    max_safe <- 2^53
+    # valor máximo de z aproximado: (10^k - 1)^2 ≈ 10^(2k)
+    approx_z_max <- (10^k)
+    if (10^(2*k) > max_safe) {
+      warning(sprintf("Para k = %d la extracción podría perder precisión en z = x^2 (recomendado k <= 8).", k))
+    }
+  }
+  
+  u <- numeric(n)
+  
+  for (i in seq_len(n)) {
+    z <- seed * seed
+    # implementación equivalente a:
+    # seed <- trunc((z - trunc(z/aux)*aux)/aux2)
+    # pero usando operaciones mod y floor:
+    # extraer (z mod aux) then dividir por aux2
+    seed <- floor((z %% aux) / aux2)
+    u[i] <- seed / (10^k)
+  }
+  
+  # guardar semilla final y parámetros en el entorno global (similar a simres)
+  if (isTRUE(save_seed)) {
+    assign(".rng",
+           list(seed = seed, type = "vm", parameters = list(k = k)),
+           envir = globalenv())
+  }
+  
+  return(u)
+}
+
+# Generar 100 números pseudoaleatorios con semilla 1234
+numeros_pseudoaleatorios <- cuadrados_medios(100, 1234, k = 4)
+numeros_pseudoaleatorios
+```
+Del mismo modo, se puede observar que la secuencia generada por esta función también cae en el estado absorbente de cero (0) después de varios pasos, confirmando nuevamente la limitación del método de los cuadrados medios.
+
+## Análisis de la calidad del generador por el método de los cuadrados medios
+
+<p style="text-align: justify;">Para evaluar la calidad del generador de números pseudoaleatorios basado en el método de los cuadrados medios, se pueden utilizar diversas pruebas estadísticas. A continuación, se presentan algunas de las pruebas más comunes:</p>
+1. **Prueba de uniformidad**: Esta prueba evalúa si los números generados están distribuidos uniformemente en el intervalo [0, 1). Se puede realizar mediante un histograma o utilizando pruebas estadísticas como la prueba de Chi-cuadrado.
+2. **Prueba de independencia**: Esta prueba verifica si los números generados son independientes entre sí. Se pueden utilizar pruebas como la prueba de autocorrelación para evaluar la independencia.
+3. **Prueba de secuencias**: Esta prueba analiza la longitud de las secuencias de números generados para detectar patrones repetitivos. Se pueden utilizar pruebas como la prueba de runs para evaluar la aleatoriedad de las secuencias.
+4. **Prueba de Kolmogorov-Smirnov**: Esta prueba compara la distribución empírica de los números generados con la distribución teórica uniforme para evaluar si los números siguen una distribución uniforme.
+5. **Prueba de Poker**: Esta prueba evalúa la frecuencia de diferentes combinaciones de dígitos en los números generados, similar a las manos en el juego de poker, para detectar patrones no aleatorios.
+
+## Implementación de pruebas estadísticas en <span style="color: blue;">R</span>
+
+<p style="text-align: justify;">Como se pudo observar, el ejemplo anterior con el método de los cuadrados medios mostró una clara limitación al caer en un estado absorbente. Por este motivo, se utilizará otra semilla inicial ($x_0$) y un valor de $k$ mayor a 4, esto garantizará que por lo menos podamos generar 100 números pseudoaleatorios. Si bien esto no soluciona el problema de la absorción, si que retrasa su aparición. Por último, se implementarán las pruebas estadísticas mencionadas en <span style="color: blue;">R</span> para evaluar la calidad del generador.</p>
+
+<p style="text-align: justify;">A continuación, se generarán 100 números pseudoaleatorios utilizando el paquete `simres`, una semilla inicial de 123456 y $k=6$ dígitos centrales.</p>
+
+```{r}
+#| label: ejemplo_mid_square_2
+#| echo: true
+#| warning: false
+#| message: false
+simres::rvng(100, 123456, k=6) 
+```
+<p style="text-align: justify;">Como se puede observar, no se tienen números pseudoaleatorios iguales a cero (0) en esta secuencia generada con una semilla mayor y $k=6$ dígitos centrales.</p>
+
+Estos mismos resultados se obtienen utilizando una función propia implementada en R:
+
+```{r}
+#| label: mid_square_function_ejemplo_2
+#| echo: true
+#| warning: false
+#| message: false
+# Generar 100 números pseudoaleatorios con semilla 1234
+numeros_pseudoaleatorios2 <- cuadrados_medios(100, 123456, k = 6)
+numeros_pseudoaleatorios2
+```
+<p style="text-align: justify;">Como se puede observar, la secuencia generada por esta función propia tampoco contiene ceros (0) en los primeros 100 números generados.</p>
+
+<p style="text-align: justify;">A continuación, se presentan las implementaciones de las pruebas estadísticas mencionadas anteriormente para evaluar la calidad del generador de números pseudoaleatorios basado en el método de los cuadrados medios.</p>
+
+
