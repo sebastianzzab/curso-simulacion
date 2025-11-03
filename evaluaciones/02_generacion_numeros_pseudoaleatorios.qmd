@@ -13,48 +13,53 @@ editor: visual
 
 # Importancia de los números pseudoaleatorios
 
-<p style="text-align: justify;">Los números pseudoaleatorios son fundamentales en diversas áreas de la informática y las matemáticas, incluyendo simulaciones, criptografía, juegos y algoritmos de optimización. A diferencia de los números verdaderamente aleatorios, que se generan a partir de fenómenos físicos impredecibles, los números pseudoaleatorios se generan mediante algoritmos deterministas que producen secuencias de números que imitan las propiedades estadísticas de los números aleatorios.</p>
+<p style="text-align: justify;">
+
+Los números pseudoaleatorios son fundamentales en diversas áreas de la informática y las matemáticas, incluyendo simulaciones, criptografía, juegos y algoritmos de optimización. A diferencia de los números verdaderamente aleatorios, que se generan a partir de fenómenos físicos impredecibles, los números pseudoaleatorios se generan mediante algoritmos deterministas que producen secuencias de números que imitan las propiedades estadísticas de los números aleatorios.
+
+</p>
 
 # Métodos comunes para generar números pseudoaleatorios
+
 Existen varios métodos para generar números pseudoaleatorios, entre los cuales destacan:
 
-1. **Generadores Congruenciales Lineales (LCG)**: Este es uno de los métodos más simples y ampliamente utilizados. Utiliza una fórmula matemática para generar una secuencia de números basada en una semilla inicial. La fórmula general es:
-   $$
-   \begin{equation*}
-   X_{n+1} = (aX_n + c) \mod m
-   \end{equation*}
-   $$
-   donde $(X)$ es el número pseudoaleatorio, ($a$), ($c$) y ($m$) son constantes, y ($X_0$) es la semilla inicial.
-2. **Generadores de Mersenne Twister**: Este es un generador de números pseudoaleatorios más avanzado que ofrece una mayor calidad y un período más largo que los LCG. Es ampliamente utilizado en aplicaciones científicas y de simulación.
-3. **Generadores basados en hardware**: Algunos sistemas utilizan fuentes de entropía física, como ruido térmico o movimientos del mouse, para generar números aleatorios. Aunque estos no son estrictamente pseudoaleatorios, a menudo se combinan con métodos algorítmicos para mejorar la calidad de los números generados.
+1.  **Generadores Congruenciales Lineales (LCG)**: Este es uno de los métodos más simples y ampliamente utilizados. Utiliza una fórmula matemática para generar una secuencia de números basada en una semilla inicial. La fórmula general es: $$
+    \begin{equation*}
+    X_{n+1} = (aX_n + c) \mod m
+    \end{equation*}
+    $$ donde $(X)$ es el número pseudoaleatorio, ($a$), ($c$) y ($m$) son constantes, y ($X_0$) es la semilla inicial.
+2.  **Generadores de Mersenne Twister**: Este es un generador de números pseudoaleatorios más avanzado que ofrece una mayor calidad y un período más largo que los LCG. Es ampliamente utilizado en aplicaciones científicas y de simulación.
+3.  **Generadores basados en hardware**: Algunos sistemas utilizan fuentes de entropía física, como ruido térmico o movimientos del mouse, para generar números aleatorios. Aunque estos no son estrictamente pseudoaleatorios, a menudo se combinan con métodos algorítmicos para mejorar la calidad de los números generados.
 
 # Método de los Cuadrados Medios
 
-<p style="text-align: justify;">Uno de los métodos clásicos para generar números pseudoaleatorios es el **método de los cuadrados medios**. Siendo uno de los primeros métodos propuestos históricamente para la generación de números pseudoaleatorios, introducido por John von Neumann en 1946. A pesar de que hoy en día se considera un método con limitaciones importantes en cuanto a la calidad de las secuencias que produce, resulta útil para fines didácticos, pues permite comprender de forma clara cómo un algoritmo determinista puede generar una secuencia de valores a partir de una semilla inicial.</p>
+<p style="text-align: justify;">
+
+Uno de los métodos clásicos para generar números pseudoaleatorios es el **método de los cuadrados medios**. Siendo uno de los primeros métodos propuestos históricamente para la generación de números pseudoaleatorios, introducido por John von Neumann en 1946. A pesar de que hoy en día se considera un método con limitaciones importantes en cuanto a la calidad de las secuencias que produce, resulta útil para fines didácticos, pues permite comprender de forma clara cómo un algoritmo determinista puede generar una secuencia de valores a partir de una semilla inicial.
+
+</p>
 
 ## Pasos para aplicar el método de los cuadrados medios
-Este método implica los siguientes pasos: <br>
-i. Se escoge un número de cuatro dígitos $x_0$ (semilla). <br> 
-ii. Se eleva al cuadrado ($x_0^2$) y se toman los cuatro dígitos centrales ($x_1$).<br> 
-iii. Se genera el el número pseudo-aleatorio como
-$$
+
+Este método implica los siguientes pasos: <br> i. Se escoge un número de cuatro dígitos $x_0$ (semilla). <br> ii. Se eleva al cuadrado ($x_0^2$) y se toman los cuatro dígitos centrales ($x_1$).<br> iii. Se genera el el número pseudo-aleatorio como $$
 \begin{equation*}
 u_1 = \frac{x_1}{10^4}
 \end{equation*}
-$$
-iv. Volver al paso ii y repetir el proceso. <br>
-Para obtener los $k$ (número par) dígitos centrales de $x_i^2$ se puede utilizar que:
-$$
+$$ iv. Volver al paso ii y repetir el proceso. <br> Para obtener los $k$ (número par) dígitos centrales de $x_i^2$ se puede utilizar que: $$
 \begin{equation*}
 x_{i+1} = \left\lfloor \left( x_i^2 - \left\lfloor \frac{x_i^2}{10^{\left(2k - \frac{k}{2}\right)}} \right\rfloor 10^{\left(2k - \frac{k}{2}\right)} \right) / 10^{\frac{k}{2}} \right\rfloor
 \end{equation*}
 $$
 
-## Implementación del método de los cuadrados medios en <span style="color: blue;">R</span>
+## Implementación del método de los cuadrados medios en [R]{style="color: blue;"}
 
 #### Ejemplo con semilla 1234 y 100 valores utilizando el paquete `simres`
 
-<p style="text-align: justify;">Para ejemplificar el funcionamiento del método de los cuadrados medios, se generarán 100 números pseudoaleatorios utilizando una semilla inicial de 1234 ($x_0=1234$) con $k=4$ dígitos centrales. Todo esto usando la función `simres::rvng()` del paquete `simres`.</p>
+<p style="text-align: justify;">
+
+Para ejemplificar el funcionamiento del método de los cuadrados medios, se generarán 100 números pseudoaleatorios utilizando una semilla inicial de 1234 ($x_0=1234$) con $k=4$ dígitos centrales. Todo esto usando la función `simres::rvng()` del paquete `simres`.
+
+</p>
 
 ```{r}
 #| label: ejemplo_mid_square
@@ -64,13 +69,22 @@ $$
 library(simres)
 simres::rvng(100, 1234) 
 ```
-<p style="text-align: justify;">Como se puede observar, llegado un punto de la secuencia, los números generados son todos ceros (0). Relevando asi uno de los principales problemas del método de cuadrados medios, **la absorción**. El problema es que si en algún paso se obtiene un número pequeño (pocos dígitos), al rellenar con ceros y tomar los dígitos centrales se pueden sacar muchos ceros, llegando asi a cero (0). Y si $x_n=0$, entonces $x_{n+1}=0$ para siempre.</p>
 
-::: {.callout-warning}
+<p style="text-align: justify;">
+
+Como se puede observar, llegado un punto de la secuencia, los números generados son todos ceros (0). Relevando asi uno de los principales problemas del método de cuadrados medios, **la absorción**. El problema es que si en algún paso se obtiene un número pequeño (pocos dígitos), al rellenar con ceros y tomar los dígitos centrales se pueden sacar muchos ceros, llegando asi a cero (0). Y si $x_n=0$, entonces $x_{n+1}=0$ para siempre.
+
+</p>
+
+::: callout-warning
 **Advertencia:** El método de los cuadrados medios puede degenerar rápidamente al valor 0.
 :::
 
-<p style="text-align: justify;">A continuación se muestran las operaciones específicas que provocan la caída de la secuencia hacia el cero. Consideremos el punto de la secuencia en el que comienzan a aparecer valores pequeños, lo cual desencadena la absorción:</p>
+<p style="text-align: justify;">
+
+A continuación se muestran las operaciones específicas que provocan la caída de la secuencia hacia el cero. Consideremos el punto de la secuencia en el que comienzan a aparecer valores pequeños, lo cual desencadena la absorción:
+
+</p>
 
 $$
 x_{53} = 3317
@@ -130,10 +144,15 @@ $$
 x_{57} = 0 \Rightarrow x_{58} = 0 \Rightarrow x_{59} = 0 \Rightarrow \dots
 $$
 
-Lo que confirma que, una vez que el método alcanza \(0\), no es posible recuperar valores distintos de cero, perdiéndose completamente la utilidad del generador.
+Lo que confirma que, una vez que el método alcanza (0), no es posible recuperar valores distintos de cero, perdiéndose completamente la utilidad del generador.
 
 #### Ejemplo con semilla 1234 y 100 valores utilizando función propia
-<p style="text-align: justify;">A continuación, se presenta una implementación propia del método de los cuadrados medios en R para generar 100 números pseudoaleatorios a partir de una semilla inicial de 1234.</p>
+
+<p style="text-align: justify;">
+
+A continuación, se presenta una implementación propia del método de los cuadrados medios en R para generar 100 números pseudoaleatorios a partir de una semilla inicial de 1234.
+
+</p>
 
 ```{r}
 #| label: mid_square_function
@@ -201,31 +220,53 @@ cuadrados_medios <- function(n,
 numeros_pseudoaleatorios <- cuadrados_medios(100, 1234, k = 4)
 numeros_pseudoaleatorios
 ```
+
 Del mismo modo, se puede observar que la secuencia generada por esta función también cae en el estado absorbente de cero (0) después de varios pasos, confirmando nuevamente la limitación del método de los cuadrados medios.
 
-## Análisis de la calidad del generador por el método de los cuadrados medios
+## Análisis de la calidad del generador por el método de los cuadrados medios para una secuencia
 
-<p style="text-align: justify;">Para evaluar la calidad del generador de números pseudoaleatorios basado en el método de los cuadrados medios, se pueden utilizar diversas pruebas estadísticas. A continuación, se presentan algunas de las pruebas más comunes:</p>
-1. **Prueba de uniformidad**: Esta prueba evalúa si los números generados están distribuidos uniformemente en el intervalo [0, 1). Se puede realizar mediante un histograma o utilizando pruebas estadísticas como la prueba de Chi-cuadrado.
-2. **Prueba de independencia**: Esta prueba verifica si los números generados son independientes entre sí. Se pueden utilizar pruebas como la prueba de autocorrelación para evaluar la independencia.
-3. **Prueba de secuencias**: Esta prueba analiza la longitud de las secuencias de números generados para detectar patrones repetitivos. Se pueden utilizar pruebas como la prueba de runs para evaluar la aleatoriedad de las secuencias.
-4. **Prueba de Kolmogorov-Smirnov**: Esta prueba compara la distribución empírica de los números generados con la distribución teórica uniforme para evaluar si los números siguen una distribución uniforme.
-5. **Prueba de Poker**: Esta prueba evalúa la frecuencia de diferentes combinaciones de dígitos en los números generados, similar a las manos en el juego de poker, para detectar patrones no aleatorios.
+<p style="text-align: justify;">
 
-## Implementación de pruebas estadísticas en <span style="color: blue;">R</span>
+Para evaluar la calidad del generador de números pseudoaleatorios basado en el método de los cuadrados medios, se pueden utilizar diversas pruebas estadísticas. A continuación, se presentan algunas de las pruebas más comunes:
 
-<p style="text-align: justify;">Como se pudo observar, el ejemplo anterior con el método de los cuadrados medios mostró una clara limitación al caer en un estado absorbente. Por este motivo, se utilizará otra semilla inicial ($x_0$) y un valor de $k$ mayor a 4, esto garantizará que por lo menos podamos generar 100 números pseudoaleatorios. Si bien esto no soluciona el problema de la absorción, si que retrasa su aparición. Por último, se implementarán las pruebas estadísticas mencionadas en <span style="color: blue;">R</span> para evaluar la calidad del generador.</p>
+| Propósito del Análisis | Prueba o Gráfico Utilizado |
+| :--- | :--- |
+| **Uniformidad** | Prueba de Chi-cuadrado |
+| | Prueba de Kolmogorov-Smirnov |
+| | Histograma |
+| **Independencia** | Gráfico Secuencial |
+| | Gráfico de Dispersión Retardado |
+| | Correlograma (Función de Autocorrelación) |
+| | Prueba de Ljung-Box |
 
-<p style="text-align: justify;">A continuación, se generarán 100 números pseudoaleatorios utilizando el paquete `simres`, una semilla inicial de 123456 y $k=6$ dígitos centrales.</p>
+## Implementación de pruebas estadísticas en [R]{style="color: blue;"}
+
+<p style="text-align: justify;">
+
+Como se pudo observar, el ejemplo anterior con el método de los cuadrados medios mostró una clara limitación al caer en un estado absorbente. Por este motivo, se utilizará otra semilla inicial ($x_0$) y un valor de $k$ mayor a 4, esto garantizará que por lo menos podamos generar 100 números pseudoaleatorios. Si bien esto no soluciona el problema de la absorción, si que retrasa su aparición. Por último, se implementarán las pruebas estadísticas mencionadas en [R]{style="color: blue;"} para evaluar la calidad del generador.
+
+</p>
+
+<p style="text-align: justify;">
+
+A continuación, se generarán 100 números pseudoaleatorios utilizando el paquete `simres`, una semilla inicial de 123456 y $k=6$ dígitos centrales.
+
+</p>
 
 ```{r}
 #| label: ejemplo_mid_square_2
 #| echo: true
 #| warning: false
 #| message: false
-simres::rvng(100, 123456, k=6) 
+numeros_generados <- simres::rvng(100, 123456, k=6) 
+numeros_generados
 ```
-<p style="text-align: justify;">Como se puede observar, no se tienen números pseudoaleatorios iguales a cero (0) en esta secuencia generada con una semilla mayor y $k=6$ dígitos centrales.</p>
+
+<p style="text-align: justify;">
+
+Como se puede observar, no se tienen números pseudoaleatorios iguales a cero (0) en esta secuencia generada con una semilla mayor y $k=6$ dígitos centrales.
+
+</p>
 
 Estos mismos resultados se obtienen utilizando una función propia implementada en R:
 
@@ -238,8 +279,238 @@ Estos mismos resultados se obtienen utilizando una función propia implementada 
 numeros_pseudoaleatorios2 <- cuadrados_medios(100, 123456, k = 6)
 numeros_pseudoaleatorios2
 ```
-<p style="text-align: justify;">Como se puede observar, la secuencia generada por esta función propia tampoco contiene ceros (0) en los primeros 100 números generados.</p>
 
-<p style="text-align: justify;">A continuación, se presentan las implementaciones de las pruebas estadísticas mencionadas anteriormente para evaluar la calidad del generador de números pseudoaleatorios basado en el método de los cuadrados medios.</p>
+<p style="text-align: justify;">
+Como se puede observar, la secuencia generada por esta función propia tampoco contiene ceros (0) en los primeros 100 números generados.
+</p>
 
+<p style="text-align: justify;">
+A continuación, se aplicarán las pruebas de uniformidad e independencia.
+</p>
+
+### Análisis de Uniformidad
+
+<p style="text-align: justify;"> La prueba de uniformidad evalúa si los números generados se distribuyen de manera uniforme en el intervalo [0, 1). </p>
+
+#### Prueba de Chi-cuadrado
+
+<p style="text-align: justify;">Esta prueba divide el intervalo [0, 1) en subintervalos y compara las frecuencias observadas de números en cada uno con las frecuencias esperadas. La función `simres::freq.test()` es una implementación directa de este contraste para una distribución uniforme. </p>
+
+```{r}
+#| label: prueba_chi_cuadrado
+# Aplicamos el test de Chi-cuadrado
+simres::freq.test(numeros_generados, nclass = 10)
+```
+<p style="text-align: justify;">El resultado de la prueba de Chi-cuadrado indica si se puede rechazar la hipótesis nula de que los números generados siguen una distribución uniforme. Un valor p alto sugiere que no hay evidencia suficiente para rechazar la hipótesis nula, indicando una buena uniformidad en la distribución de los números generados.</p>
+
+#### Prueba de Kolmogorov-Smirnov
+
+<p style="text-align: justify;">La prueba de Kolmogorov-Smirnov compara la distribución empírica de los números generados con la distribución teórica uniforme. La función `ks.test()` en R se utiliza para realizar esta prueba. </p>
+
+```{r}
+#| label: prueba_kolmogorov_smirnov
+# Aplicamos el test de Kolmogorov-Smirnov
+ks.test(numeros_generados, "punif", 0, 1)
+```
+
+<p style="text-align: justify;">El resultado de la prueba de Kolmogorov-Smirnov proporciona un valor p que indica si se puede rechazar la hipótesis nula de que los números generados siguen una distribución uniforme. Un valor p alto sugiere que no hay evidencia suficiente para rechazar la hipótesis nula, indicando una buena uniformidad en la distribución de los números generados.</p>
+
+
+### Análisis Gráfico: Histograma
+
+<p style="text-align: justify;">Un histograma es una representación gráfica que muestra la distribución de los números generados. Si los números son uniformemente distribuidos, el histograma debería mostrar barras de alturas similares en todo el rango. </p>
+
+```{r}
+#| label: histograma_numeros
+# Histograma de la secuencia generada
+hist(numeros_generados, freq = FALSE, main = "Histograma de Números Pseudoaleatorios",
+     xlab = "Valor", ylab = "Densidad", breaks = 10)
+abline(h = 1, col = "red", lwd = 2) # Línea de la densidad uniforme teórica
+```
+
+<p style="text-align: justify;">El histograma muestra la distribución de los números pseudoaleatorios generados. La línea roja representa la densidad uniforme teórica. Si las barras del histograma están cerca de esta línea, indica que los números generados están distribuidos uniformemente.</p>
+
+### Análisis de Independencia
+
+<p style="text-align: justify;">Estas pruebas verifican si los números en la secuencia son independientes entre sí, un requisito fundamental para la aleatoriedad.</p>
+
+#### Gráfico Secuencial y de Dispersión Retardado
+<p style="text-align: justify;">Estos gráficos son herramientas visuales para detectar patrones. El gráfico secuencial muestra los valores en el orden en que fueron generados, mientras que el de dispersión retardado compara cada valor con el siguiente</p>
+
+```{r}
+#| label: graficos_independencia
+# Gráfico secuencial y de dispersión retardado
+par(mfrow = c(1, 2))
+plot(as.ts(numeros_generados), main = "Gráfico Secuencial", xlab = "Índice", ylab = "Valor")
+plot(numeros_generados[-100], numeros_generados[-1], 
+     main = "Dispersión Retardado (lag 1)", xlab = "U_t", ylab = "U_t+1")
+par(mfrow = c(1, 1))
+```
+
+<p style="text-align: justify;">El gráfico secuencial muestra la evolución de los números generados a lo largo del tiempo. Si no hay patrones evidentes, sugiere independencia. El gráfico de dispersión retardado (lag 1) compara cada número con el siguiente. Si los puntos están dispersos sin formar patrones claros, indica independencia entre los números consecutivos.</p>
+
+#### Prueba de Autocorrelación (Correlograma y Test de Ljung-Box)
+
+<p style="text-align: justify;">El correlograma (página 36) muestra las autocorrelaciones para diferentes retardos (lags). Para una secuencia independiente, estas autocorrelaciones deberían estar dentro de los límites de confianza (líneas azules). El test de Ljung-Box es la prueba formal asociada.</p>
+
+```{r}
+#| label: prueba_autocorrelacion
+# Correlograma
+acf(numeros_generados, main = "Función de Autocorrelación")
+```
+
+<p style="text-align: justify;">El correlograma muestra las autocorrelaciones de la secuencia de números generados para diferentes retardos (lags). Si las barras están dentro de los límites de confianza (líneas azules), sugiere que no hay autocorrelación significativa, indicando independencia entre los números generados.</p>
+
+```{r}
+#| label: test_ljung_box
+# Test de Ljung-Box
+Box.test(numeros_generados, lag = 10, type = "Ljung-Box")
+```
+
+<p style="text-align: justify;">El resultado del test de Ljung-Box proporciona un valor p que indica si se puede rechazar la hipótesis nula de independencia. Un valor p alto sugiere que no hay evidencia suficiente para rechazar la hipótesis nula, indicando independencia entre los números generados.</p>
+
+### Comportamiento Estadístico General y Limitaciones del Período
+
+<p style="text-align: justify;">Aunque esta secuencia particular de 100 números pasa las pruebas de uniformidad e independencia, es crucial recordar la principal debilidad del método de los cuadrados medios: su corto período y su tendencia a degenerar.
+Como se demostró en el documento original, con una semilla como 1234 y k=4, la secuencia degenera rápidamente a cero. La elección de una semilla y un valor de k más grandes (123456 y k=6) ha permitido generar una secuencia corta que parece estadísticamente aceptable. Sin embargo, para aplicaciones serias que requieren secuencias largas (miles o millones de números), este generador no es fiable, ya que eventualmente entrará en un ciclo corto o degenerará.</p>
+
+
+### Conclusión
+
+<p style="text-align: justify;">Para la secuencia corta de 100 valores analizada, el generador de cuadrados medios con la semilla y k especificados produce resultados que son consistentes con una muestra uniforme e independiente. Pasa satisfactoriamente las pruebas de Chi-cuadrado, Kolmogorov-Smirnov, Ljung-Box y los análisis gráficos. No obstante, este resultado no valida al generador para un uso general, debido a sus conocidas y graves deficiencias estructurales, como el corto período y la degeneración, que lo hacen inadecuado para la mayoría de las aplicaciones de simulación.ación, que lo hacen inadecuado para la mayoría de las aplicaciones de simulación.</p>
+
+## Análisis de la Calidad del generador por el método de los cuadrados medios sobre Múltiples Secuencias
+
+<p style="text-align: justify;">Para obtener una evaluación más robusta de la calidad del generador de números pseudoaleatorios basado en el método de los cuadrados medios, se pueden generar múltiples secuencias independientes y aplicar las pruebas estadísticas a cada una. Esto permite observar la consistencia del generador a través de diferentes ejecuciones.</p>
+
+<p style="text-align: justify;">Por estos motivos se aplicara la siguiente metodologa para evaluar la calidad del generador sobre múltiples secuencias:</p>
+
+| Paso | Descripción | Detalles Clave |
+|:---|:---|:---|
+| 1 | **Generación de Secuencias** | Se generarán **100 secuencias** de **100 números** cada una, utilizando el método de los cuadrados medios (`k=6`) con 100 semillas aleatorias distintas. |
+| 2 | **Aplicación de Pruebas** | A cada una de las 100 secuencias se le aplicarán individualmente las pruebas de **Chi-cuadrado**, **Kolmogorov-Smirnov** (para uniformidad) y **Ljung-Box** (para independencia). |
+| 3 | **Análisis Agregado** | Se recopilarán los **p-valores** de todas las pruebas para calcular la **proporción de rechazos** (fallos) y se analiza su distribución para evaluar la consistencia del generador. |
+
+### Implementación en [R]{style="color: blue;"}
+
+<p style="text-align: justify;">Primero, preparamos el entorno y definimos los parámetros para la simulación.</p>
+
+```{r}
+#| label: analisis_multiple_secuencias
+#| echo: true
+#| warning: false
+#| message: false
+# Parámetros de la simulación
+num_secuencias <- 100
+n_por_secuencia <- 100
+k <- 6
+alpha <- 0.05
+
+# Generar 100 semillas aleatorias de 6 dígitos para asegurar consistencia con k
+set.seed(123) # Para la reproducibilidad de las semillas
+semillas <- sample(100000:999999, num_secuencias)
+
+# Vectores para almacenar los p-valores de cada prueba
+p_valores_chisq <- numeric(num_secuencias)
+p_valores_ks <- numeric(num_secuencias)
+p_valores_ljungbox <- numeric(num_secuencias)
+```
+
+<p style="text-align: justify;">Ahora, iteramos sobre las semillas, generamos cada secuencia y aplicamos las pruebas.</p>
+
+
+```{r}
+#| label: bucle_pruebas_secuencias
+# Bucle para generar secuencias y aplicar pruebas
+for (i in 1:num_secuencias) {
+  # Generar la secuencia
+  seq_actual <- simres::rvng(n_por_secuencia, seed = semillas[i], k = k)
+  
+  # 1. Prueba de Chi-cuadrado para uniformidad
+  test_chisq <- suppressWarnings(
+    simres::freq.test(seq_actual, nclass = 10)
+  )
+  p_valores_chisq[i] <- test_chisq$p.value
+  
+  # 2. Prueba de Kolmogorov-Smirnov para uniformidad
+  # Se suprimen las advertencias sobre empates, que son esperadas.
+  test_ks <- suppressWarnings(ks.test(seq_actual, "punif"))
+  p_valores_ks[i] <- test_ks$p.value
+  
+  # 3. Prueba de Ljung-Box para independencia
+  test_ljungbox <- Box.test(seq_actual, lag = 10, type = "Ljung-Box")
+  p_valores_ljungbox[i] <- test_ljungbox$p.value
+}
+```
+
+<p style="text-align: justify;">Finalmente, analizamos los resultados agregados de las pruebas.</p>
+
+### Resumen Comparativo de Resultados
+Con los p-valores de las 100 simulaciones, podemos calcular la proporción de veces que cada prueba rechazó la hipótesis nula (es decir, falló en demostrar calidad estadística) a un nivel de significancia de 0.05.
+
+```{r}
+#| label: resumen_resultados_multiple
+#| echo: true
+#| warning: false
+#| message: false
+# Calcular la proporción de rechazos
+rechazos_chisq <- sum(p_valores_chisq < alpha) / num_secuencias
+rechazos_ks <- sum(p_valores_ks < alpha) / num_secuencias
+rechazos_ljungbox <- sum(p_valores_ljungbox < alpha) / num_secuencias
+
+# Crear tabla de resumen
+resumen <- data.frame(
+  Prueba = c("Chi-cuadrado (Uniformidad)", "Kolmogorov-Smirnov (Uniformidad)", "Ljung-Box (Independencia)"),
+  Proporcion_Rechazos = c(rechazos_chisq, rechazos_ks, rechazos_ljungbox),
+  Proporcion_Aceptaciones = c(1 - rechazos_chisq, 1 - rechazos_ks, 1 - rechazos_ljungbox)
+)
+
+knitr::kable(resumen, 
+             caption = "Proporción de secuencias que pasan o fallan las pruebas de calidad (alpha = 0.05).",
+             col.names = c("Prueba Estadística", "Proporción de Fallos (Rechazo H₀)", "Proporción de Aceptaciones (No Rechazo H₀)"))
+```
+
+<p style="text-align: justify;">El resumen muestra la proporción de secuencias que pasaron o fallaron cada una de las pruebas estadísticas. Idealmente, para un buen generador de números pseudoaleatorios, se esperaría que la proporción de rechazos sea cercana al nivel de significancia (0.05 no en este caso), indicando que las secuencias generadas no son consistentes con las propiedades esperadas de uniformidad e independencia.</p>
+
+<p style="text-align: justify;">Esto último debido a que los resultados muestran una clara deficiencia en el generador. Si el generador produjera secuencias verdaderamente aleatorias, esperaríamos que la proporción de fallos (rechazos de la hipótesis nula) fuera aproximadamente del 5% (alpha = 0.05). Sin embargo, los resultados obtenidos son:</p>
+
++ 14% para la prueba de Chi-cuadrado.
++ 13% para la prueba de Kolmogorov-Smirnov.
++ 16% para la prueba de Ljung-Box.
+
+<p style="text-align: justify;">Estas proporciones son casi tres veces mayores que el nivel de significancia esperado. Esto indica que el generador falla en producir secuencias que aparenten ser uniformes e independientes con mucha más frecuencia de la debida, revelando una inconsistencia sistemática en su comportamiento.</p>
+
+### Distribución de los P-valores
+
+<p style="text-align: justify;">Además de la proporción de rechazos, es útil visualizar la distribución de los p-valores obtenidos en las pruebas para evaluar si se comportan como se esperaría bajo la hipótesis nula.</p>
+
+```{r}
+#| label: distribucion_pvalores
+#| echo: true
+#| warning: false
+#| message: false
+# Gráficos de los p-valores
+par(mfrow = c(1, 3), mar = c(4, 4, 3, 1))
+hist(p_valores_chisq, main = "P-valores: Chi-cuadrado", xlab = "p-valor", freq = FALSE, breaks = 10)
+abline(h = 1, col = "red", lty = 2)
+hist(p_valores_ks, main = "P-valores: K-S", xlab = "p-valor", freq = FALSE, breaks = 10)
+abline(h = 1, col = "red", lty = 2)
+hist(p_valores_ljungbox, main = "P-valores: Ljung-Box", xlab = "p-valor", freq = FALSE, breaks = 10)
+abline(h = 1, col = "red", lty = 2)
+par(mfrow = c(1, 1))
+```
+
+
+<p style="text-align: justify;">Los histogramas de los p-valores se desvían notablemente de la distribución uniforme esperada (representada por la línea roja discontinua), lo que confirma las deficiencias del generador:</p>
++ P-valores de Chi-cuadrado: Se observa una fuerte acumulación de p-valores en el extremo izquierdo del histograma (intervalo [0.0, 0.1]). Esto indica que un número desproporcionadamente alto de secuencias fallaron la prueba de uniformidad, lo cual es consistente con la tasa de rechazo del 14% observada en la tabla.
++ P-valores de K-S: Este gráfico muestra una distribución en forma de "U", con picos tanto en valores muy bajos como muy altos. Esta es una señal clásica de un generador defectuoso. No solo produce secuencias que se desvían significativamente de la uniformidad (p-valores bajos), sino que también genera secuencias que son "demasiado perfectas" o sospechosamente uniformes (p-valores altos), algo que tampoco es esperable en un proceso verdaderamente aleatorio.
++ P-valores de Ljung-Box: Al igual que en la prueba de Chi-cuadrado, se observa una clara tendencia a generar p-valores bajos, lo que llevó a una tasa de rechazo del 16% y evidencia problemas sistemáticos con la independencia de los números generados.
+
+### Conclusión Final sobre Estabilidad y Confiabilidad
+
+<p style="text-align: justify;">El análisis sobre 100 secuencias independientes demuestra de manera concluyente que el método de los cuadrados medios no es un generador de números pseudoaleatorios confiable ni estable, ni siquiera para secuencias cortas con semillas aparentemente bien elegidas.</p>
+
+<p style="text-align: justify;">Mientras que el análisis de una sola secuencia puede, por azar, no revelar problemas, la evaluación repetida muestra un patrón claro de fallos estadísticos. Las tasas de rechazo para las pruebas de uniformidad (14% y 13%) e independencia (16%) son casi tres veces superiores al nivel de significancia esperado del 5%. Esta discrepancia, visualmente confirmada por la distribución no uniforme de los p-valores, indica que el método no genera de forma consistente secuencias que imiten adecuadamente las propiedades de una muestra aleatoria.</p>
+
+<p style="text-align: justify;">En definitiva, el método de los cuadrados medios es estadísticamente deficiente. Su valor es puramente histórico y didáctico. Para cualquier aplicación práctica, es imperativo utilizar generadores modernos y robustos, como el Mersenne-Twister, que ha superado rigurosas baterías de pruebas y es el predeterminado en [R]{style="color: blue;"}. que ha superado rigurosas baterías de pruebas y es el predeterminado en [R]{style="color: blue;"}. </p>
 
