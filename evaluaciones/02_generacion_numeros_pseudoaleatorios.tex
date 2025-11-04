@@ -1,0 +1,1084 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  spanish,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod]{scrartcl}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{241,243,245}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+
+\ifLuaTeX
+\usepackage[bidi=basic]{babel}
+\else
+\usepackage[bidi=default]{babel}
+\fi
+% get rid of language-specific shorthands (see #6817):
+\let\LanguageShortHands\languageshorthands
+\def\languageshorthands#1{}
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
+\@ifpackageloaded{fontawesome5}{}{\usepackage{fontawesome5}}
+\definecolor{quarto-callout-color}{HTML}{909090}
+\definecolor{quarto-callout-note-color}{HTML}{0758E5}
+\definecolor{quarto-callout-important-color}{HTML}{CC1914}
+\definecolor{quarto-callout-warning-color}{HTML}{EB9113}
+\definecolor{quarto-callout-tip-color}{HTML}{00A047}
+\definecolor{quarto-callout-caution-color}{HTML}{FC5300}
+\definecolor{quarto-callout-color-frame}{HTML}{acacac}
+\definecolor{quarto-callout-note-color-frame}{HTML}{4582ec}
+\definecolor{quarto-callout-important-color-frame}{HTML}{d9534f}
+\definecolor{quarto-callout-warning-color-frame}{HTML}{f0ad4e}
+\definecolor{quarto-callout-tip-color-frame}{HTML}{02b875}
+\definecolor{quarto-callout-caution-color-frame}{HTML}{fd7e14}
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Tabla de contenidos}
+\else
+  \newcommand\contentsname{Tabla de contenidos}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{Listado de Figuras}
+\else
+  \newcommand\listfigurename{Listado de Figuras}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{Listado de Tablas}
+\else
+  \newcommand\listtablename{Listado de Tablas}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figura}
+\else
+  \newcommand\figurename{Figura}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Tabla}
+\else
+  \newcommand\tablename{Tabla}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listado}
+\newcommand*\listoflistings{\listof{codelisting}{Listado de Listados}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Generación de números pseudoaleatorios mediante el método de los cuadrados medios},
+  pdfauthor={Luis Ríos; Sebastian Zabala},
+  pdflang={es},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Generación de números pseudoaleatorios mediante el método de los
+cuadrados medios}
+\author{Luis Ríos \and Sebastian Zabala}
+\date{2025-11-04}
+\begin{document}
+\maketitle
+
+
+\section{Importancia de los números
+pseudoaleatorios}\label{importancia-de-los-nuxfameros-pseudoaleatorios}
+
+Los números pseudoaleatorios son fundamentales en diversas áreas de la
+informática y las matemáticas, incluyendo simulaciones, criptografía,
+juegos y algoritmos de optimización. A diferencia de los números
+verdaderamente aleatorios, que se generan a partir de fenómenos físicos
+impredecibles, los números pseudoaleatorios se generan mediante
+algoritmos deterministas que producen secuencias de números que imitan
+las propiedades estadísticas de los números aleatorios.
+
+\section{Métodos comunes para generar números
+pseudoaleatorios}\label{muxe9todos-comunes-para-generar-nuxfameros-pseudoaleatorios}
+
+Existen varios métodos para generar números pseudoaleatorios, entre los
+cuales destacan:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Generadores Congruenciales Lineales (LCG)}: Este es uno de los
+  métodos más simples y ampliamente utilizados. Utiliza una fórmula
+  matemática para generar una secuencia de números basada en una semilla
+  inicial. La fórmula general es: \[
+  \begin{equation*}
+  X_{n+1} = (aX_n + c) \mod m
+  \end{equation*}
+  \] donde \((X)\) es el número pseudoaleatorio, (\(a\)), (\(c\)) y
+  (\(m\)) son constantes, y (\(X_0\)) es la semilla inicial.
+\item
+  \textbf{Generadores de Mersenne Twister}: Este es un generador de
+  números pseudoaleatorios más avanzado que ofrece una mayor calidad y
+  un período más largo que los LCG. Es ampliamente utilizado en
+  aplicaciones científicas y de simulación.
+\item
+  \textbf{Generadores basados en hardware}: Algunos sistemas utilizan
+  fuentes de entropía física, como ruido térmico o movimientos del
+  mouse, para generar números aleatorios. Aunque estos no son
+  estrictamente pseudoaleatorios, a menudo se combinan con métodos
+  algorítmicos para mejorar la calidad de los números generados.
+\end{enumerate}
+
+\section{Método de los Cuadrados
+Medios}\label{muxe9todo-de-los-cuadrados-medios}
+
+Uno de los métodos clásicos para generar números pseudoaleatorios es el
+\textbf{método de los cuadrados medios}. Siendo uno de los primeros
+métodos propuestos históricamente para la generación de números
+pseudoaleatorios, introducido por John von Neumann en 1946. A pesar de
+que hoy en día se considera un método con limitaciones importantes en
+cuanto a la calidad de las secuencias que produce, resulta útil para
+fines didácticos, pues permite comprender de forma clara cómo un
+algoritmo determinista puede generar una secuencia de valores a partir
+de una semilla inicial.
+
+\subsection{Pasos para aplicar el método de los cuadrados
+medios}\label{pasos-para-aplicar-el-muxe9todo-de-los-cuadrados-medios}
+
+Este método implica los siguientes pasos: i. Se escoge un número de
+cuatro dígitos \(x_0\) (semilla). ii. Se eleva al cuadrado (\(x_0^2\)) y
+se toman los cuatro dígitos centrales (\(x_1\)). iii. Se genera el el
+número pseudo-aleatorio como \[
+\begin{equation*}
+u_1 = \frac{x_1}{10^4}
+\end{equation*}
+\] iv. Volver al paso ii y repetir el proceso. Para obtener los \(k\)
+(número par) dígitos centrales de \(x_i^2\) se puede utilizar que: \[
+\begin{equation*}
+x_{i+1} = \left\lfloor \left( x_i^2 - \left\lfloor \frac{x_i^2}{10^{\left(2k - \frac{k}{2}\right)}} \right\rfloor 10^{\left(2k - \frac{k}{2}\right)} \right) / 10^{\frac{k}{2}} \right\rfloor
+\end{equation*}
+\]
+
+\subsection{\texorpdfstring{Implementación del método de los cuadrados
+medios en
+{R}}{Implementación del método de los cuadrados medios en R}}\label{implementaciuxf3n-del-muxe9todo-de-los-cuadrados-medios-en-r}
+
+\paragraph{\texorpdfstring{Ejemplo con semilla 1234 y 100 valores
+utilizando el paquete
+\texttt{simres}}{Ejemplo con semilla 1234 y 100 valores utilizando el paquete simres}}\label{ejemplo-con-semilla-1234-y-100-valores-utilizando-el-paquete-simres}
+
+Para ejemplificar el funcionamiento del método de los cuadrados medios,
+se generarán 100 números pseudoaleatorios utilizando una semilla inicial
+de 1234 (\(x_0=1234\)) con \(k=4\) dígitos centrales. Todo esto usando
+la función \texttt{simres::rvng()} del paquete \texttt{simres}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(simres)}
+\NormalTok{simres}\SpecialCharTok{::}\FunctionTok{rvng}\NormalTok{(}\DecValTok{100}\NormalTok{, }\DecValTok{1234}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  [1] 0.5227 0.3215 0.3362 0.3030 0.1809 0.2724 0.4201 0.6484 0.0422 0.1780
+ [11] 0.1684 0.8358 0.8561 0.2907 0.4506 0.3040 0.2416 0.8370 0.0569 0.3237
+ [21] 0.4781 0.8579 0.5992 0.9040 0.7216 0.0706 0.4984 0.8402 0.5936 0.2360
+ [31] 0.5696 0.4444 0.7491 0.1150 0.3225 0.4006 0.0480 0.2304 0.3084 0.5110
+ [41] 0.1121 0.2566 0.5843 0.1406 0.9768 0.4138 0.1230 0.5129 0.3066 0.4003
+ [51] 0.0240 0.0576 0.3317 0.0024 0.0005 0.0000 0.0000 0.0000 0.0000 0.0000
+ [61] 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+ [71] 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+ [81] 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+ [91] 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+\end{verbatim}
+
+Como se puede observar, llegado un punto de la secuencia, los números
+generados son todos ceros (0). Relevando asi uno de los principales
+problemas del método de cuadrados medios, \textbf{la absorción}. El
+problema es que si en algún paso se obtiene un número pequeño (pocos
+dígitos), al rellenar con ceros y tomar los dígitos centrales se pueden
+sacar muchos ceros, llegando asi a cero (0). Y si \(x_n=0\), entonces
+\(x_{n+1}=0\) para siempre.
+
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, colback=white, breakable, colbacktitle=quarto-callout-warning-color!10!white, toprule=.15mm, arc=.35mm, opacityback=0, bottomtitle=1mm, bottomrule=.15mm, opacitybacktitle=0.6, left=2mm, colframe=quarto-callout-warning-color-frame, leftrule=.75mm, rightrule=.15mm, titlerule=0mm, toptitle=1mm, title=\textcolor{quarto-callout-warning-color}{\faExclamationTriangle}\hspace{0.5em}{Advertencia}]
+
+\textbf{Advertencia:} El método de los cuadrados medios puede degenerar
+rápidamente al valor 0.
+
+\end{tcolorbox}
+
+A continuación se muestran las operaciones específicas que provocan la
+caída de la secuencia hacia el cero. Consideremos el punto de la
+secuencia en el que comienzan a aparecer valores pequeños, lo cual
+desencadena la absorción:
+
+\[
+x_{53} = 3317
+\]
+
+\textbf{1. Primer paso}
+
+\[
+x_{53}^2 = 3317^2 = 11002489
+\]
+
+Tomando los dígitos centrales:
+
+\[
+11002489 \Rightarrow \boxed{0024}
+\]
+
+\[
+x_{54} = 0024 = 24
+\]
+
+\textbf{2. Segundo paso}
+
+\[
+x_{54}^2 = 24^2 = 576
+\]
+
+Tomando los dígitos centrales:
+
+\[
+00000576 \Rightarrow \boxed{0005}
+\]
+
+\[
+x_{55} = 0005 = 5
+\]
+
+\textbf{3. Tercer paso}
+
+\[
+x_{55}^2 = 5^2 = 25
+\]
+
+Tomando los dígitos centrales:
+
+\[
+00000025 \Rightarrow \boxed{0000}
+\]
+
+\[
+x_{56} = 0000 = 0
+\]
+
+A partir de aquí, la secuencia queda atrapada en un \textbf{estado
+absorbente}:
+
+\[
+x_{57} = 0 \Rightarrow x_{58} = 0 \Rightarrow x_{59} = 0 \Rightarrow \dots
+\]
+
+Lo que confirma que, una vez que el método alcanza (0), no es posible
+recuperar valores distintos de cero, perdiéndose completamente la
+utilidad del generador.
+
+\paragraph{Ejemplo con semilla 1234 y 100 valores utilizando función
+propia}\label{ejemplo-con-semilla-1234-y-100-valores-utilizando-funciuxf3n-propia}
+
+A continuación, se presenta una implementación propia del método de los
+cuadrados medios en R para generar 100 números pseudoaleatorios a partir
+de una semilla inicial de 1234.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cuadrados\_medios }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(n,}
+                             \AttributeTok{seed =} \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{Sys.time}\NormalTok{()),}
+                             \AttributeTok{k =} \DecValTok{4}\NormalTok{,}
+                             \AttributeTok{save\_seed =} \ConstantTok{TRUE}\NormalTok{,}
+                             \AttributeTok{warn =} \ConstantTok{TRUE}\NormalTok{) \{}
+  \CommentTok{\# n: cantidad de números a generar}
+  \CommentTok{\# seed: semilla inicial (entero o numérico). Se truncará y reducirá modulo 10\^{}k.}
+  \CommentTok{\# k: número de dígitos centrales (debe ser par)}
+  \CommentTok{\# save\_seed: si TRUE guarda .rng en globalenv() (semilla final y parámetros)}
+  \CommentTok{\# warn: si TRUE muestra advertencias sobre precisión}
+  
+  \ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{is.numeric}\NormalTok{(n) }\SpecialCharTok{||}\NormalTok{ n }\SpecialCharTok{\textless{}=} \DecValTok{0}\NormalTok{) }\FunctionTok{stop}\NormalTok{(}\StringTok{"n debe ser un entero positivo"}\NormalTok{)}
+  \ControlFlowTok{if}\NormalTok{ ((k }\SpecialCharTok{\%\%} \DecValTok{2}\NormalTok{) }\SpecialCharTok{!=} \DecValTok{0}\NormalTok{) }\FunctionTok{stop}\NormalTok{(}\StringTok{"k debe ser par"}\NormalTok{)}
+  \ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{is.numeric}\NormalTok{(seed)) seed }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(seed)}
+  
+  \CommentTok{\# normalizar semilla: usar solo sus últimos k dígitos}
+\NormalTok{  seed }\OtherTok{\textless{}{-}} \FunctionTok{floor}\NormalTok{(seed)}
+\NormalTok{  seed }\OtherTok{\textless{}{-}}\NormalTok{ seed }\SpecialCharTok{\%\%}\NormalTok{ (}\DecValTok{10}\SpecialCharTok{\^{}}\NormalTok{k)}
+  
+  \CommentTok{\# parámetros para extracción por módulo (idénticos al fragmento de simres)}
+\NormalTok{  halfk }\OtherTok{\textless{}{-}}\NormalTok{ k }\SpecialCharTok{/} \DecValTok{2}
+\NormalTok{  aux   }\OtherTok{\textless{}{-}} \DecValTok{10}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{2}\SpecialCharTok{*}\NormalTok{k }\SpecialCharTok{{-}}\NormalTok{ halfk)  }\CommentTok{\# = 10\^{}(2k {-} k/2)  (entero si k par)}
+\NormalTok{  aux2  }\OtherTok{\textless{}{-}} \DecValTok{10}\SpecialCharTok{\^{}}\NormalTok{halfk          }\CommentTok{\# = 10\^{}(k/2)}
+  
+  \CommentTok{\# chequeo de precisión: si z = seed\^{}2 puede exceder la precisión entera segura}
+  \CommentTok{\# doble precisión en R mantiene enteros exactos hasta \textasciitilde{}2\^{}53 (\textasciitilde{}9e15).}
+  \ControlFlowTok{if}\NormalTok{ (warn) \{}
+\NormalTok{    max\_safe }\OtherTok{\textless{}{-}} \DecValTok{2}\SpecialCharTok{\^{}}\DecValTok{53}
+    \CommentTok{\# valor máximo de z aproximado: (10\^{}k {-} 1)\^{}2 ≈ 10\^{}(2k)}
+\NormalTok{    approx\_z\_max }\OtherTok{\textless{}{-}}\NormalTok{ (}\DecValTok{10}\SpecialCharTok{\^{}}\NormalTok{k)}
+    \ControlFlowTok{if}\NormalTok{ (}\DecValTok{10}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{2}\SpecialCharTok{*}\NormalTok{k) }\SpecialCharTok{\textgreater{}}\NormalTok{ max\_safe) \{}
+      \FunctionTok{warning}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{"Para k = \%d la extracción podría perder precisión en z = x\^{}2 (recomendado k \textless{}= 8)."}\NormalTok{, k))}
+\NormalTok{    \}}
+\NormalTok{  \}}
+  
+\NormalTok{  u }\OtherTok{\textless{}{-}} \FunctionTok{numeric}\NormalTok{(n)}
+  
+  \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \FunctionTok{seq\_len}\NormalTok{(n)) \{}
+\NormalTok{    z }\OtherTok{\textless{}{-}}\NormalTok{ seed }\SpecialCharTok{*}\NormalTok{ seed}
+    \CommentTok{\# implementación equivalente a:}
+    \CommentTok{\# seed \textless{}{-} trunc((z {-} trunc(z/aux)*aux)/aux2)}
+    \CommentTok{\# pero usando operaciones mod y floor:}
+    \CommentTok{\# extraer (z mod aux) then dividir por aux2}
+\NormalTok{    seed }\OtherTok{\textless{}{-}} \FunctionTok{floor}\NormalTok{((z }\SpecialCharTok{\%\%}\NormalTok{ aux) }\SpecialCharTok{/}\NormalTok{ aux2)}
+\NormalTok{    u[i] }\OtherTok{\textless{}{-}}\NormalTok{ seed }\SpecialCharTok{/}\NormalTok{ (}\DecValTok{10}\SpecialCharTok{\^{}}\NormalTok{k)}
+\NormalTok{  \}}
+  
+  \CommentTok{\# guardar semilla final y parámetros en el entorno global (similar a simres)}
+  \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{isTRUE}\NormalTok{(save\_seed)) \{}
+    \FunctionTok{assign}\NormalTok{(}\StringTok{".rng"}\NormalTok{,}
+           \FunctionTok{list}\NormalTok{(}\AttributeTok{seed =}\NormalTok{ seed, }\AttributeTok{type =} \StringTok{"vm"}\NormalTok{, }\AttributeTok{parameters =} \FunctionTok{list}\NormalTok{(}\AttributeTok{k =}\NormalTok{ k)),}
+           \AttributeTok{envir =} \FunctionTok{globalenv}\NormalTok{())}
+\NormalTok{  \}}
+  
+  \FunctionTok{return}\NormalTok{(u)}
+\NormalTok{\}}
+
+\CommentTok{\# Generar 100 números pseudoaleatorios con semilla 1234}
+\NormalTok{numeros\_pseudoaleatorios }\OtherTok{\textless{}{-}} \FunctionTok{cuadrados\_medios}\NormalTok{(}\DecValTok{100}\NormalTok{, }\DecValTok{1234}\NormalTok{, }\AttributeTok{k =} \DecValTok{4}\NormalTok{)}
+\NormalTok{numeros\_pseudoaleatorios}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  [1] 0.5227 0.3215 0.3362 0.3030 0.1809 0.2724 0.4201 0.6484 0.0422 0.1780
+ [11] 0.1684 0.8358 0.8561 0.2907 0.4506 0.3040 0.2416 0.8370 0.0569 0.3237
+ [21] 0.4781 0.8579 0.5992 0.9040 0.7216 0.0706 0.4984 0.8402 0.5936 0.2360
+ [31] 0.5696 0.4444 0.7491 0.1150 0.3225 0.4006 0.0480 0.2304 0.3084 0.5110
+ [41] 0.1121 0.2566 0.5843 0.1406 0.9768 0.4138 0.1230 0.5129 0.3066 0.4003
+ [51] 0.0240 0.0576 0.3317 0.0024 0.0005 0.0000 0.0000 0.0000 0.0000 0.0000
+ [61] 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+ [71] 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+ [81] 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+ [91] 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+\end{verbatim}
+
+Del mismo modo, se puede observar que la secuencia generada por esta
+función también cae en el estado absorbente de cero (0) después de
+varios pasos, confirmando nuevamente la limitación del método de los
+cuadrados medios.
+
+\subsection{Análisis de la calidad del generador por el método de los
+cuadrados medios para una
+secuencia}\label{anuxe1lisis-de-la-calidad-del-generador-por-el-muxe9todo-de-los-cuadrados-medios-para-una-secuencia}
+
+Para evaluar la calidad del generador de números pseudoaleatorios basado
+en el método de los cuadrados medios, se pueden utilizar diversas
+pruebas estadísticas. A continuación, se presentan algunas de las
+pruebas más comunes:
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+Propósito del Análisis & Prueba o Gráfico Utilizado \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Uniformidad} & Prueba de Chi-cuadrado \\
+& Prueba de Kolmogorov-Smirnov \\
+& Histograma \\
+\textbf{Independencia} & Gráfico Secuencial \\
+& Gráfico de Dispersión Retardado \\
+& Correlograma (Función de Autocorrelación) \\
+& Prueba de Ljung-Box \\
+\end{longtable}
+
+\subsection{\texorpdfstring{Implementación de pruebas estadísticas en
+{R}}{Implementación de pruebas estadísticas en R}}\label{implementaciuxf3n-de-pruebas-estaduxedsticas-en-r}
+
+Como se pudo observar, el ejemplo anterior con el método de los
+cuadrados medios mostró una clara limitación al caer en un estado
+absorbente. Por este motivo, se utilizará otra semilla inicial (\(x_0\))
+y un valor de \(k\) mayor a 4, esto garantizará que por lo menos podamos
+generar 100 números pseudoaleatorios. Si bien esto no soluciona el
+problema de la absorción, si que retrasa su aparición. Por último, se
+implementarán las pruebas estadísticas mencionadas en {R} para evaluar
+la calidad del generador.
+
+A continuación, se generarán 100 números pseudoaleatorios utilizando el
+paquete \texttt{simres}, una semilla inicial de 123456 y \(k=6\) dígitos
+centrales.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{numeros\_generados }\OtherTok{\textless{}{-}}\NormalTok{ simres}\SpecialCharTok{::}\FunctionTok{rvng}\NormalTok{(}\DecValTok{100}\NormalTok{, }\DecValTok{123456}\NormalTok{, }\AttributeTok{k=}\DecValTok{6}\NormalTok{) }
+\NormalTok{numeros\_generados}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  [1] 0.241383 0.265752 0.624125 0.532015 0.039960 0.596801 0.171433 0.389273
+  [9] 0.533468 0.588107 0.869843 0.626844 0.933400 0.235560 0.488513 0.644951
+ [17] 0.961792 0.043851 0.922910 0.762868 0.967585 0.220732 0.722615 0.172438
+ [25] 0.734863 0.023628 0.558282 0.678791 0.757221 0.383642 0.181184 0.827641
+ [33] 0.989624 0.355661 0.494746 0.773604 0.463148 0.506069 0.105832 0.200412
+ [41] 0.164969 0.214770 0.126152 0.914327 0.993862 0.761675 0.148805 0.142928
+ [49] 0.428413 0.537698 0.119139 0.194101 0.675198 0.892339 0.268890 0.301832
+ [57] 0.102556 0.517733 0.047459 0.252356 0.683550 0.240602 0.889322 0.893619
+ [65] 0.554917 0.932876 0.257631 0.373732 0.675607 0.444818 0.863053 0.860480
+ [73] 0.425830 0.331188 0.685491 0.897911 0.244163 0.615570 0.926424 0.261427
+ [81] 0.344076 0.388293 0.771453 0.139731 0.524752 0.364661 0.977644 0.787790
+ [89] 0.613084 0.871991 0.368304 0.647836 0.691482 0.147356 0.713790 0.496164
+ [97] 0.178714 0.938693 0.144548 0.894124
+\end{verbatim}
+
+Como se puede observar, no se tienen números pseudoaleatorios iguales a
+cero (0) en esta secuencia generada con una semilla mayor y \(k=6\)
+dígitos centrales.
+
+Estos mismos resultados se obtienen utilizando una función propia
+implementada en R:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Generar 100 números pseudoaleatorios con semilla 1234}
+\NormalTok{numeros\_pseudoaleatorios2 }\OtherTok{\textless{}{-}} \FunctionTok{cuadrados\_medios}\NormalTok{(}\DecValTok{100}\NormalTok{, }\DecValTok{123456}\NormalTok{, }\AttributeTok{k =} \DecValTok{6}\NormalTok{)}
+\NormalTok{numeros\_pseudoaleatorios2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  [1] 0.241383 0.265752 0.624125 0.532015 0.039960 0.596801 0.171433 0.389273
+  [9] 0.533468 0.588107 0.869843 0.626844 0.933400 0.235560 0.488513 0.644951
+ [17] 0.961792 0.043851 0.922910 0.762868 0.967585 0.220732 0.722615 0.172438
+ [25] 0.734863 0.023628 0.558282 0.678791 0.757221 0.383642 0.181184 0.827641
+ [33] 0.989624 0.355661 0.494746 0.773604 0.463148 0.506069 0.105832 0.200412
+ [41] 0.164969 0.214770 0.126152 0.914327 0.993862 0.761675 0.148805 0.142928
+ [49] 0.428413 0.537698 0.119139 0.194101 0.675198 0.892339 0.268890 0.301832
+ [57] 0.102556 0.517733 0.047459 0.252356 0.683550 0.240602 0.889322 0.893619
+ [65] 0.554917 0.932876 0.257631 0.373732 0.675607 0.444818 0.863053 0.860480
+ [73] 0.425830 0.331188 0.685491 0.897911 0.244163 0.615570 0.926424 0.261427
+ [81] 0.344076 0.388293 0.771453 0.139731 0.524752 0.364661 0.977644 0.787790
+ [89] 0.613084 0.871991 0.368304 0.647836 0.691482 0.147356 0.713790 0.496164
+ [97] 0.178714 0.938693 0.144548 0.894124
+\end{verbatim}
+
+Como se puede observar, la secuencia generada por esta función propia
+tampoco contiene ceros (0) en los primeros 100 números generados.
+
+A continuación, se aplicarán las pruebas de uniformidad e independencia.
+
+\subsubsection{Análisis de
+Uniformidad}\label{anuxe1lisis-de-uniformidad}
+
+La prueba de uniformidad evalúa si los números generados se distribuyen
+de manera uniforme en el intervalo {[}0, 1).
+
+\paragraph{Prueba de Chi-cuadrado}\label{prueba-de-chi-cuadrado}
+
+Esta prueba divide el intervalo {[}0, 1) en subintervalos y compara las
+frecuencias observadas de números en cada uno con las frecuencias
+esperadas. La función \texttt{simres::freq.test()} es una implementación
+directa de este contraste para una distribución uniforme.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Aplicamos el test de Chi{-}cuadrado}
+\NormalTok{simres}\SpecialCharTok{::}\FunctionTok{freq.test}\NormalTok{(numeros\_generados, }\AttributeTok{nclass =} \DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+    Chi-squared test for given probabilities
+
+data:  numeros_generados
+X-squared = 8, df = 9, p-value = 0.5341
+\end{verbatim}
+
+El resultado de la prueba de Chi-cuadrado indica si se puede rechazar la
+hipótesis nula de que los números generados siguen una distribución
+uniforme. Un valor p alto sugiere que no hay evidencia suficiente para
+rechazar la hipótesis nula, indicando una buena uniformidad en la
+distribución de los números generados.
+
+\paragraph{Prueba de
+Kolmogorov-Smirnov}\label{prueba-de-kolmogorov-smirnov}
+
+La prueba de Kolmogorov-Smirnov compara la distribución empírica de los
+números generados con la distribución teórica uniforme. La función
+\texttt{ks.test()} en R se utiliza para realizar esta prueba.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Aplicamos el test de Kolmogorov{-}Smirnov}
+\FunctionTok{ks.test}\NormalTok{(numeros\_generados, }\StringTok{"punif"}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+    Asymptotic one-sample Kolmogorov-Smirnov test
+
+data:  numeros_generados
+D = 0.062556, p-value = 0.8287
+alternative hypothesis: two-sided
+\end{verbatim}
+
+El resultado de la prueba de Kolmogorov-Smirnov proporciona un valor p
+que indica si se puede rechazar la hipótesis nula de que los números
+generados siguen una distribución uniforme. Un valor p alto sugiere que
+no hay evidencia suficiente para rechazar la hipótesis nula, indicando
+una buena uniformidad en la distribución de los números generados.
+
+\subsubsection{Análisis Gráfico:
+Histograma}\label{anuxe1lisis-gruxe1fico-histograma}
+
+Un histograma es una representación gráfica que muestra la distribución
+de los números generados. Si los números son uniformemente distribuidos,
+el histograma debería mostrar barras de alturas similares en todo el
+rango.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Histograma de la secuencia generada}
+\FunctionTok{hist}\NormalTok{(numeros\_generados, }\AttributeTok{freq =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{main =} \StringTok{"Histograma de Números Pseudoaleatorios"}\NormalTok{,}
+     \AttributeTok{xlab =} \StringTok{"Valor"}\NormalTok{, }\AttributeTok{ylab =} \StringTok{"Densidad"}\NormalTok{, }\AttributeTok{breaks =} \DecValTok{10}\NormalTok{)}
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{h =} \DecValTok{1}\NormalTok{, }\AttributeTok{col =} \StringTok{"red"}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{) }\CommentTok{\# Línea de la densidad uniforme teórica}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{02_generacion_numeros_pseudoaleatorios_files/figure-pdf/histograma_numeros-1.pdf}}
+
+El histograma muestra la distribución de los números pseudoaleatorios
+generados. La línea roja representa la densidad uniforme teórica. Si las
+barras del histograma están cerca de esta línea, indica que los números
+generados están distribuidos uniformemente.
+
+\subsubsection{Análisis de
+Independencia}\label{anuxe1lisis-de-independencia}
+
+Estas pruebas verifican si los números en la secuencia son
+independientes entre sí, un requisito fundamental para la aleatoriedad.
+
+\paragraph{Gráfico Secuencial y de Dispersión
+Retardado}\label{gruxe1fico-secuencial-y-de-dispersiuxf3n-retardado}
+
+Estos gráficos son herramientas visuales para detectar patrones. El
+gráfico secuencial muestra los valores en el orden en que fueron
+generados, mientras que el de dispersión retardado compara cada valor
+con el siguiente
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Gráfico secuencial y de dispersión retardado}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(}\FunctionTok{as.ts}\NormalTok{(numeros\_generados), }\AttributeTok{main =} \StringTok{"Gráfico Secuencial"}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"Índice"}\NormalTok{, }\AttributeTok{ylab =} \StringTok{"Valor"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(numeros\_generados[}\SpecialCharTok{{-}}\DecValTok{100}\NormalTok{], numeros\_generados[}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{], }
+     \AttributeTok{main =} \StringTok{"Dispersión Retardado (lag 1)"}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"U\_t"}\NormalTok{, }\AttributeTok{ylab =} \StringTok{"U\_t+1"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{02_generacion_numeros_pseudoaleatorios_files/figure-pdf/graficos_independencia-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+El gráfico secuencial muestra la evolución de los números generados a lo
+largo del tiempo. Si no hay patrones evidentes, sugiere independencia.
+El gráfico de dispersión retardado (lag 1) compara cada número con el
+siguiente. Si los puntos están dispersos sin formar patrones claros,
+indica independencia entre los números consecutivos.
+
+\paragraph{Prueba de Autocorrelación (Correlograma y Test de
+Ljung-Box)}\label{prueba-de-autocorrelaciuxf3n-correlograma-y-test-de-ljung-box}
+
+El correlograma (página 36) muestra las autocorrelaciones para
+diferentes retardos (lags). Para una secuencia independiente, estas
+autocorrelaciones deberían estar dentro de los límites de confianza
+(líneas azules). El test de Ljung-Box es la prueba formal asociada.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Correlograma}
+\FunctionTok{acf}\NormalTok{(numeros\_generados, }\AttributeTok{main =} \StringTok{"Función de Autocorrelación"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{02_generacion_numeros_pseudoaleatorios_files/figure-pdf/prueba_autocorrelacion-1.pdf}}
+
+El correlograma muestra las autocorrelaciones de la secuencia de números
+generados para diferentes retardos (lags). Si las barras están dentro de
+los límites de confianza (líneas azules), sugiere que no hay
+autocorrelación significativa, indicando independencia entre los números
+generados.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Test de Ljung{-}Box}
+\FunctionTok{Box.test}\NormalTok{(numeros\_generados, }\AttributeTok{lag =} \DecValTok{10}\NormalTok{, }\AttributeTok{type =} \StringTok{"Ljung{-}Box"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+    Box-Ljung test
+
+data:  numeros_generados
+X-squared = 11.542, df = 10, p-value = 0.3168
+\end{verbatim}
+
+El resultado del test de Ljung-Box proporciona un valor p que indica si
+se puede rechazar la hipótesis nula de independencia. Un valor p alto
+sugiere que no hay evidencia suficiente para rechazar la hipótesis nula,
+indicando independencia entre los números generados.
+
+\subsubsection{Comportamiento Estadístico General y Limitaciones del
+Período}\label{comportamiento-estaduxedstico-general-y-limitaciones-del-peruxedodo}
+
+Aunque esta secuencia particular de 100 números pasa las pruebas de
+uniformidad e independencia, es crucial recordar la principal debilidad
+del método de los cuadrados medios: su corto período y su tendencia a
+degenerar. Como se demostró en el documento original, con una semilla
+como 1234 y k=4, la secuencia degenera rápidamente a cero. La elección
+de una semilla y un valor de k más grandes (123456 y k=6) ha permitido
+generar una secuencia corta que parece estadísticamente aceptable. Sin
+embargo, para aplicaciones serias que requieren secuencias largas (miles
+o millones de números), este generador no es fiable, ya que
+eventualmente entrará en un ciclo corto o degenerará.
+
+\subsubsection{Conclusión}\label{conclusiuxf3n}
+
+Para la secuencia corta de 100 valores analizada, el generador de
+cuadrados medios con la semilla y k especificados produce resultados que
+son consistentes con una muestra uniforme e independiente. Pasa
+satisfactoriamente las pruebas de Chi-cuadrado, Kolmogorov-Smirnov,
+Ljung-Box y los análisis gráficos. No obstante, este resultado no valida
+al generador para un uso general, debido a sus conocidas y graves
+deficiencias estructurales, como el corto período y la degeneración, que
+lo hacen inadecuado para la mayoría de las aplicaciones de
+simulación.ación, que lo hacen inadecuado para la mayoría de las
+aplicaciones de simulación.
+
+\subsection{Análisis de la Calidad del generador por el método de los
+cuadrados medios sobre Múltiples
+Secuencias}\label{anuxe1lisis-de-la-calidad-del-generador-por-el-muxe9todo-de-los-cuadrados-medios-sobre-muxfaltiples-secuencias}
+
+Para obtener una evaluación más robusta de la calidad del generador de
+números pseudoaleatorios basado en el método de los cuadrados medios, se
+pueden generar múltiples secuencias independientes y aplicar las pruebas
+estadísticas a cada una. Esto permite observar la consistencia del
+generador a través de diferentes ejecuciones.
+
+Por estos motivos se aplicara la siguiente metodologa para evaluar la
+calidad del generador sobre múltiples secuencias:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Paso
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Descripción
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Detalles Clave
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & \textbf{Generación de Secuencias} & Se generarán \textbf{100
+secuencias} de \textbf{100 números} cada una, utilizando el método de
+los cuadrados medios (\texttt{k=6}) con 100 semillas aleatorias
+distintas. \\
+2 & \textbf{Aplicación de Pruebas} & A cada una de las 100 secuencias se
+le aplicarán individualmente las pruebas de \textbf{Chi-cuadrado},
+\textbf{Kolmogorov-Smirnov} (para uniformidad) y \textbf{Ljung-Box}
+(para independencia). \\
+3 & \textbf{Análisis Agregado} & Se recopilarán los \textbf{p-valores}
+de todas las pruebas para calcular la \textbf{proporción de rechazos}
+(fallos) y se analiza su distribución para evaluar la consistencia del
+generador. \\
+\end{longtable}
+
+\subsubsection{\texorpdfstring{Implementación en
+{R}}{Implementación en R}}\label{implementaciuxf3n-en-r}
+
+Primero, preparamos el entorno y definimos los parámetros para la
+simulación.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Parámetros de la simulación}
+\NormalTok{num\_secuencias }\OtherTok{\textless{}{-}} \DecValTok{100}
+\NormalTok{n\_por\_secuencia }\OtherTok{\textless{}{-}} \DecValTok{100}
+\NormalTok{k }\OtherTok{\textless{}{-}} \DecValTok{6}
+\NormalTok{alpha }\OtherTok{\textless{}{-}} \FloatTok{0.05}
+
+\CommentTok{\# Generar 100 semillas aleatorias de 6 dígitos para asegurar consistencia con k}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{) }\CommentTok{\# Para la reproducibilidad de las semillas}
+\NormalTok{semillas }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\DecValTok{100000}\SpecialCharTok{:}\DecValTok{999999}\NormalTok{, num\_secuencias)}
+
+\CommentTok{\# Vectores para almacenar los p{-}valores de cada prueba}
+\NormalTok{p\_valores\_chisq }\OtherTok{\textless{}{-}} \FunctionTok{numeric}\NormalTok{(num\_secuencias)}
+\NormalTok{p\_valores\_ks }\OtherTok{\textless{}{-}} \FunctionTok{numeric}\NormalTok{(num\_secuencias)}
+\NormalTok{p\_valores\_ljungbox }\OtherTok{\textless{}{-}} \FunctionTok{numeric}\NormalTok{(num\_secuencias)}
+\end{Highlighting}
+\end{Shaded}
+
+Ahora, iteramos sobre las semillas, generamos cada secuencia y aplicamos
+las pruebas.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Bucle para generar secuencias y aplicar pruebas}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{num\_secuencias) \{}
+  \CommentTok{\# Generar la secuencia}
+\NormalTok{  seq\_actual }\OtherTok{\textless{}{-}}\NormalTok{ simres}\SpecialCharTok{::}\FunctionTok{rvng}\NormalTok{(n\_por\_secuencia, }\AttributeTok{seed =}\NormalTok{ semillas[i], }\AttributeTok{k =}\NormalTok{ k)}
+  
+  \CommentTok{\# 1. Prueba de Chi{-}cuadrado para uniformidad}
+\NormalTok{  test\_chisq }\OtherTok{\textless{}{-}} \FunctionTok{suppressWarnings}\NormalTok{(}
+\NormalTok{    simres}\SpecialCharTok{::}\FunctionTok{freq.test}\NormalTok{(seq\_actual, }\AttributeTok{nclass =} \DecValTok{10}\NormalTok{)}
+\NormalTok{  )}
+\NormalTok{  p\_valores\_chisq[i] }\OtherTok{\textless{}{-}}\NormalTok{ test\_chisq}\SpecialCharTok{$}\NormalTok{p.value}
+  
+  \CommentTok{\# 2. Prueba de Kolmogorov{-}Smirnov para uniformidad}
+  \CommentTok{\# Se suprimen las advertencias sobre empates, que son esperadas.}
+\NormalTok{  test\_ks }\OtherTok{\textless{}{-}} \FunctionTok{suppressWarnings}\NormalTok{(}\FunctionTok{ks.test}\NormalTok{(seq\_actual, }\StringTok{"punif"}\NormalTok{))}
+\NormalTok{  p\_valores\_ks[i] }\OtherTok{\textless{}{-}}\NormalTok{ test\_ks}\SpecialCharTok{$}\NormalTok{p.value}
+  
+  \CommentTok{\# 3. Prueba de Ljung{-}Box para independencia}
+\NormalTok{  test\_ljungbox }\OtherTok{\textless{}{-}} \FunctionTok{Box.test}\NormalTok{(seq\_actual, }\AttributeTok{lag =} \DecValTok{10}\NormalTok{, }\AttributeTok{type =} \StringTok{"Ljung{-}Box"}\NormalTok{)}
+\NormalTok{  p\_valores\_ljungbox[i] }\OtherTok{\textless{}{-}}\NormalTok{ test\_ljungbox}\SpecialCharTok{$}\NormalTok{p.value}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Finalmente, analizamos los resultados agregados de las pruebas.
+
+\subsubsection{Resumen Comparativo de
+Resultados}\label{resumen-comparativo-de-resultados}
+
+Con los p-valores de las 100 simulaciones, podemos calcular la
+proporción de veces que cada prueba rechazó la hipótesis nula (es decir,
+falló en demostrar calidad estadística) a un nivel de significancia de
+0.05.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calcular la proporción de rechazos}
+\NormalTok{rechazos\_chisq }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(p\_valores\_chisq }\SpecialCharTok{\textless{}}\NormalTok{ alpha) }\SpecialCharTok{/}\NormalTok{ num\_secuencias}
+\NormalTok{rechazos\_ks }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(p\_valores\_ks }\SpecialCharTok{\textless{}}\NormalTok{ alpha) }\SpecialCharTok{/}\NormalTok{ num\_secuencias}
+\NormalTok{rechazos\_ljungbox }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(p\_valores\_ljungbox }\SpecialCharTok{\textless{}}\NormalTok{ alpha) }\SpecialCharTok{/}\NormalTok{ num\_secuencias}
+
+\CommentTok{\# Crear tabla de resumen}
+\NormalTok{resumen }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{Prueba =} \FunctionTok{c}\NormalTok{(}\StringTok{"Chi{-}cuadrado (Uniformidad)"}\NormalTok{, }\StringTok{"Kolmogorov{-}Smirnov (Uniformidad)"}\NormalTok{, }\StringTok{"Ljung{-}Box (Independencia)"}\NormalTok{),}
+  \AttributeTok{Proporcion\_Rechazos =} \FunctionTok{c}\NormalTok{(rechazos\_chisq, rechazos\_ks, rechazos\_ljungbox),}
+  \AttributeTok{Proporcion\_Aceptaciones =} \FunctionTok{c}\NormalTok{(}\DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ rechazos\_chisq, }\DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ rechazos\_ks, }\DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ rechazos\_ljungbox)}
+\NormalTok{)}
+
+\NormalTok{knitr}\SpecialCharTok{::}\FunctionTok{kable}\NormalTok{(resumen, }
+             \AttributeTok{caption =} \StringTok{"Proporción de secuencias que pasan o fallan las pruebas de calidad (alpha = 0.05)."}\NormalTok{,}
+             \AttributeTok{col.names =} \FunctionTok{c}\NormalTok{(}\StringTok{"Prueba Estadística"}\NormalTok{, }\StringTok{"Proporción de Fallos (Rechazo H₀)"}\NormalTok{, }\StringTok{"Proporción de Aceptaciones (No Rechazo H₀)"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3000}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3091}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3909}}@{}}
+\caption{Proporción de secuencias que pasan o fallan las pruebas de
+calidad (alpha = 0.05).}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Prueba Estadística
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Proporción de Fallos (Rechazo H₀)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Proporción de Aceptaciones (No Rechazo H₀)
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Prueba Estadística
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Proporción de Fallos (Rechazo H₀)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Proporción de Aceptaciones (No Rechazo H₀)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Chi-cuadrado (Uniformidad) & 0.14 & 0.86 \\
+Kolmogorov-Smirnov (Uniformidad) & 0.13 & 0.87 \\
+Ljung-Box (Independencia) & 0.16 & 0.84 \\
+\end{longtable}
+
+El resumen muestra la proporción de secuencias que pasaron o fallaron
+cada una de las pruebas estadísticas. Idealmente, para un buen generador
+de números pseudoaleatorios, se esperaría que la proporción de rechazos
+sea cercana al nivel de significancia (0.05 no en este caso), indicando
+que las secuencias generadas no son consistentes con las propiedades
+esperadas de uniformidad e independencia.
+
+Esto último debido a que los resultados muestran una clara deficiencia
+en el generador. Si el generador produjera secuencias verdaderamente
+aleatorias, esperaríamos que la proporción de fallos (rechazos de la
+hipótesis nula) fuera aproximadamente del 5\% (alpha = 0.05). Sin
+embargo, los resultados obtenidos son:
+
+\begin{itemize}
+\tightlist
+\item
+  14\% para la prueba de Chi-cuadrado.
+\item
+  13\% para la prueba de Kolmogorov-Smirnov.
+\item
+  16\% para la prueba de Ljung-Box.
+\end{itemize}
+
+Estas proporciones son casi tres veces mayores que el nivel de
+significancia esperado. Esto indica que el generador falla en producir
+secuencias que aparenten ser uniformes e independientes con mucha más
+frecuencia de la debida, revelando una inconsistencia sistemática en su
+comportamiento.
+
+\subsubsection{Distribución de los
+P-valores}\label{distribuciuxf3n-de-los-p-valores}
+
+Además de la proporción de rechazos, es útil visualizar la distribución
+de los p-valores obtenidos en las pruebas para evaluar si se comportan
+como se esperaría bajo la hipótesis nula.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Gráficos de los p{-}valores}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{3}\NormalTok{), }\AttributeTok{mar =} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+\FunctionTok{hist}\NormalTok{(p\_valores\_chisq, }\AttributeTok{main =} \StringTok{"P{-}valores: Chi{-}cuadrado"}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"p{-}valor"}\NormalTok{, }\AttributeTok{freq =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{breaks =} \DecValTok{10}\NormalTok{)}
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{h =} \DecValTok{1}\NormalTok{, }\AttributeTok{col =} \StringTok{"red"}\NormalTok{, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{)}
+\FunctionTok{hist}\NormalTok{(p\_valores\_ks, }\AttributeTok{main =} \StringTok{"P{-}valores: K{-}S"}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"p{-}valor"}\NormalTok{, }\AttributeTok{freq =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{breaks =} \DecValTok{10}\NormalTok{)}
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{h =} \DecValTok{1}\NormalTok{, }\AttributeTok{col =} \StringTok{"red"}\NormalTok{, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{)}
+\FunctionTok{hist}\NormalTok{(p\_valores\_ljungbox, }\AttributeTok{main =} \StringTok{"P{-}valores: Ljung{-}Box"}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"p{-}valor"}\NormalTok{, }\AttributeTok{freq =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{breaks =} \DecValTok{10}\NormalTok{)}
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{h =} \DecValTok{1}\NormalTok{, }\AttributeTok{col =} \StringTok{"red"}\NormalTok{, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{02_generacion_numeros_pseudoaleatorios_files/figure-pdf/distribucion_pvalores-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+Los histogramas de los p-valores se desvían notablemente de la
+distribución uniforme esperada (representada por la línea roja
+discontinua), lo que confirma las deficiencias del generador:
+
+\begin{itemize}
+\tightlist
+\item
+  P-valores de Chi-cuadrado: Se observa una fuerte acumulación de
+  p-valores en el extremo izquierdo del histograma (intervalo {[}0.0,
+  0.1{]}). Esto indica que un número desproporcionadamente alto de
+  secuencias fallaron la prueba de uniformidad, lo cual es consistente
+  con la tasa de rechazo del 14\% observada en la tabla.
+\item
+  P-valores de K-S: Este gráfico muestra una distribución en forma de
+  ``U'', con picos tanto en valores muy bajos como muy altos. Esta es
+  una señal clásica de un generador defectuoso. No solo produce
+  secuencias que se desvían significativamente de la uniformidad
+  (p-valores bajos), sino que también genera secuencias que son
+  ``demasiado perfectas'' o sospechosamente uniformes (p-valores altos),
+  algo que tampoco es esperable en un proceso verdaderamente aleatorio.
+\item
+  P-valores de Ljung-Box: Al igual que en la prueba de Chi-cuadrado, se
+  observa una clara tendencia a generar p-valores bajos, lo que llevó a
+  una tasa de rechazo del 16\% y evidencia problemas sistemáticos con la
+  independencia de los números generados.
+\end{itemize}
+
+\subsubsection{Conclusión Final sobre Estabilidad y
+Confiabilidad}\label{conclusiuxf3n-final-sobre-estabilidad-y-confiabilidad}
+
+El análisis sobre 100 secuencias independientes demuestra de manera
+concluyente que el método de los cuadrados medios no es un generador de
+números pseudoaleatorios confiable ni estable, ni siquiera para
+secuencias cortas con semillas aparentemente bien elegidas.
+
+Mientras que el análisis de una sola secuencia puede, por azar, no
+revelar problemas, la evaluación repetida muestra un patrón claro de
+fallos estadísticos. Las tasas de rechazo para las pruebas de
+uniformidad (14\% y 13\%) e independencia (16\%) son casi tres veces
+superiores al nivel de significancia esperado del 5\%. Esta
+discrepancia, visualmente confirmada por la distribución no uniforme de
+los p-valores, indica que el método no genera de forma consistente
+secuencias que imiten adecuadamente las propiedades de una muestra
+aleatoria.
+
+En definitiva, el método de los cuadrados medios es estadísticamente
+deficiente. Su valor es puramente histórico y didáctico. Para cualquier
+aplicación práctica, es imperativo utilizar generadores modernos y
+robustos, como el Mersenne-Twister, que ha superado rigurosas baterías
+de pruebas y es el predeterminado en {R}. que ha superado rigurosas
+baterías de pruebas y es el predeterminado en {R}.
+
+
+
+
+\end{document}

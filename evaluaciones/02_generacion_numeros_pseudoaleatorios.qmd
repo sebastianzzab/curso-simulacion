@@ -13,31 +13,11 @@ editor: visual
 
 # Importancia de los números pseudoaleatorios
 
-<p style="text-align: justify;">
-
-Los números pseudoaleatorios son fundamentales en diversas áreas de la informática y las matemáticas, incluyendo simulaciones, criptografía, juegos y algoritmos de optimización. A diferencia de los números verdaderamente aleatorios, que se generan a partir de fenómenos físicos impredecibles, los números pseudoaleatorios se generan mediante algoritmos deterministas que producen secuencias de números que imitan las propiedades estadísticas de los números aleatorios.
-
-</p>
-
-# Métodos comunes para generar números pseudoaleatorios
-
-Existen varios métodos para generar números pseudoaleatorios, entre los cuales destacan:
-
-1.  **Generadores Congruenciales Lineales (LCG)**: Este es uno de los métodos más simples y ampliamente utilizados. Utiliza una fórmula matemática para generar una secuencia de números basada en una semilla inicial. La fórmula general es: $$
-    \begin{equation*}
-    X_{n+1} = (aX_n + c) \mod m
-    \end{equation*}
-    $$ donde $(X)$ es el número pseudoaleatorio, ($a$), ($c$) y ($m$) son constantes, y ($X_0$) es la semilla inicial.
-2.  **Generadores de Mersenne Twister**: Este es un generador de números pseudoaleatorios más avanzado que ofrece una mayor calidad y un período más largo que los LCG. Es ampliamente utilizado en aplicaciones científicas y de simulación.
-3.  **Generadores basados en hardware**: Algunos sistemas utilizan fuentes de entropía física, como ruido térmico o movimientos del mouse, para generar números aleatorios. Aunque estos no son estrictamente pseudoaleatorios, a menudo se combinan con métodos algorítmicos para mejorar la calidad de los números generados.
+<p style="text-align: justify;">Los números pseudoaleatorios son fundamentales en diversas áreas de la informática y las matemáticas, incluyendo simulaciones, criptografía, juegos y algoritmos de optimización. A diferencia de los números verdaderamente aleatorios, que se generan a partir de fenómenos físicos impredecibles, los números pseudoaleatorios se generan mediante algoritmos deterministas que producen secuencias de números que imitan las propiedades estadísticas de los números aleatorios.</p>
 
 # Método de los Cuadrados Medios
 
-<p style="text-align: justify;">
-
-Uno de los métodos clásicos para generar números pseudoaleatorios es el **método de los cuadrados medios**. Siendo uno de los primeros métodos propuestos históricamente para la generación de números pseudoaleatorios, introducido por John von Neumann en 1946. A pesar de que hoy en día se considera un método con limitaciones importantes en cuanto a la calidad de las secuencias que produce, resulta útil para fines didácticos, pues permite comprender de forma clara cómo un algoritmo determinista puede generar una secuencia de valores a partir de una semilla inicial.
-
-</p>
+<p style="text-align: justify;">Uno de los métodos clásicos para generar números pseudoaleatorios es el **método de los cuadrados medios**. Siendo uno de los primeros métodos propuestos históricamente para la generación de números pseudoaleatorios, introducido por John von Neumann en 1946. A pesar de que hoy en día se considera un método con limitaciones importantes en cuanto a la calidad de las secuencias que produce, resulta útil para fines didácticos, pues permite comprender de forma clara cómo un algoritmo determinista puede generar una secuencia de valores a partir de una semilla inicial.</p>
 
 ## Pasos para aplicar el método de los cuadrados medios
 
@@ -70,11 +50,7 @@ library(simres)
 simres::rvng(100, 1234) 
 ```
 
-<p style="text-align: justify;">
-
-Como se puede observar, llegado un punto de la secuencia, los números generados son todos ceros (0). Relevando asi uno de los principales problemas del método de cuadrados medios, **la absorción**. El problema es que si en algún paso se obtiene un número pequeño (pocos dígitos), al rellenar con ceros y tomar los dígitos centrales se pueden sacar muchos ceros, llegando asi a cero (0). Y si $x_n=0$, entonces $x_{n+1}=0$ para siempre.
-
-</p>
+<p style="text-align: justify;">Como se puede observar, llegado un punto de la secuencia, los números generados son todos ceros (0). Revelando asi uno de los principales problemas del método de cuadrados medios, **la absorción**. El problema es que si en algún paso se obtiene un número pequeño (pocos dígitos), al rellenar con ceros y tomar los dígitos centrales se pueden sacar muchos ceros, llegando asi a cero (0). Y si $x_n=0$, entonces $x_{n+1}=0$ para siempre.</p>
 
 ::: callout-warning
 **Advertencia:** El método de los cuadrados medios puede degenerar rápidamente al valor 0.
@@ -351,7 +327,7 @@ par(mfrow = c(1, 1))
 
 #### Prueba de Autocorrelación (Correlograma y Test de Ljung-Box)
 
-<p style="text-align: justify;">El correlograma (página 36) muestra las autocorrelaciones para diferentes retardos (lags). Para una secuencia independiente, estas autocorrelaciones deberían estar dentro de los límites de confianza (líneas azules). El test de Ljung-Box es la prueba formal asociada.</p>
+<p style="text-align: justify;">El correlograma muestra las autocorrelaciones para diferentes retardos (lags). Para una secuencia independiente, estas autocorrelaciones deberían estar dentro de los límites de confianza (líneas azules). El test de Ljung-Box es la prueba formal asociada.</p>
 
 ```{r}
 #| label: prueba_autocorrelacion
@@ -383,7 +359,7 @@ Como se demostró en el documento original, con una semilla como 1234 y k=4, la 
 
 <p style="text-align: justify;">Para obtener una evaluación más robusta de la calidad del generador de números pseudoaleatorios basado en el método de los cuadrados medios, se pueden generar múltiples secuencias independientes y aplicar las pruebas estadísticas a cada una. Esto permite observar la consistencia del generador a través de diferentes ejecuciones.</p>
 
-<p style="text-align: justify;">Por estos motivos se aplicara la siguiente metodologa para evaluar la calidad del generador sobre múltiples secuencias:</p>
+<p style="text-align: justify;">Por estos motivos se aplicara la siguiente metodología para evaluar la calidad del generador sobre múltiples secuencias:</p>
 
 | Paso | Descripción | Detalles Clave |
 |:---|:---|:---|
