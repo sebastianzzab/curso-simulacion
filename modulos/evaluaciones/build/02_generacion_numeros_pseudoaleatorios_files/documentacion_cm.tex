@@ -1,0 +1,121 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{xcolor}
+
+% Configuración de márgenes
+\geometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+
+% Configuración para código R
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstset{
+	language=R,
+	backgroundcolor=\color{backcolour},
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{blue},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{purple},
+	basicstyle=\ttfamily\small,
+	breakatwhitespace=false,
+	breaklines=true,
+	captionpos=b,
+	keepspaces=true,
+	numbers=left,
+	numbersep=5pt,
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	tabsize=2
+}
+
+\title{\textbf{Documentación Técnica: Generador de Cuadrados Medios}}
+\author{Implementación en R}
+\date{\today}
+
+\begin{document}
+	
+	\maketitle
+	
+	\section{Descripción General}
+	La función \texttt{cuadrados\_medios\_refactored} implementa el algoritmo de \textit{Middle-square method} (Cuadrados Medios) propuesto por John von Neumann para la generación de números pseudoaleatorios uniformes $U \sim [0, 1)$.
+	
+	Esta implementación es una refactorización optimizada para el entorno R, mejorando la legibilidad del código y manteniendo la equivalencia matemática exacta con versiones anteriores (librería \texttt{simres}).
+	
+	\section{Uso}
+	\begin{lstlisting}
+		numeros <- cuadrados_medios_refactored(n, seed, k = 4, save_seed = TRUE)
+	\end{lstlisting}
+	
+	\section{Argumentos}
+	\begin{description}
+		\item[n (entero)] Cantidad de números pseudoaleatorios a generar. Debe ser un entero positivo ($n > 0$).
+		
+		\item[seed (numérico)] Semilla inicial. Si no se especifica, se utiliza \texttt{as.numeric(Sys.time())}. La función normaliza la semilla tomando únicamente los últimos $k$ dígitos de su parte entera.
+		
+		\item[k (entero, default=4)] Número de dígitos centrales a extraer. 
+		\begin{itemize}
+			\item Debe ser un número \textbf{par}.
+			\item Se recomienda $k \leq 8$ para evitar errores de precisión de punto flotante en R.
+		\end{itemize}
+		
+		\item[save\_seed (lógico, default=TRUE)] Si es \texttt{TRUE}, almacena el estado final del generador en el entorno global (\texttt{.rng}).
+	\end{description}
+	
+	\section{Detalles del Algoritmo}
+	El método genera una secuencia de números iterando sobre los siguientes pasos matemáticos:
+	
+	\subsection{1. Cuadrado de la semilla}
+	Sea $x_i$ la semilla en la iteración $i$, se calcula su cuadrado:
+	\begin{equation}
+		z = x_i^2
+	\end{equation}
+	Por ejemplo, para $k=4$ y $x_0=1234$, $z = 1522756$.
+	
+	\subsection{2. Extracción de dígitos centrales}
+	A diferencia de implementaciones clásicas que utilizan sustracciones recursivas, esta función emplea aritmética modular y división entera para aislar los $k$ dígitos centrales. 
+	
+	Dado $z$, la nueva semilla $x_{i+1}$ se obtiene mediante:
+	
+	\begin{equation}
+		x_{i+1} = \left\lfloor \frac{z}{10^{k/2}} \right\rfloor \pmod{10^k}
+	\end{equation}
+	
+	\textbf{Interpretación:}
+	\begin{enumerate}
+		\item \textbf{División entera ($\lfloor \cdot \rfloor$):} Elimina los $k/2$ dígitos de la derecha (desplazamiento decimal).
+		\item \textbf{Módulo ($\pmod{\cdot}$):} Elimina los dígitos excedentes a la izquierda, conservando los últimos $k$.
+	\end{enumerate}
+	
+	\subsection{3. Normalización}
+	El número pseudoaleatorio uniforme $u_i$ se obtiene normalizando la nueva semilla al intervalo $[0, 1)$:
+	\begin{equation}
+		u_i = \frac{x_{i+1}}{10^k}
+	\end{equation}
+	
+	\section{Persistencia de Estado}
+	Si el parámetro \texttt{save\_seed} es \texttt{TRUE}, la función crea o sobrescribe un objeto oculto en el entorno global llamado \texttt{.rng}. Este objeto es una lista con la siguiente estructura, útil para dar continuidad a simulaciones:
+	
+	\begin{lstlisting}
+		.rng = list(
+		seed = 5227,       # Ultima semilla generada
+		type = "vm",       # Identificador del metodo (von Mises/Neumann)
+		parameters = list(k = 4)
+		)
+	\end{lstlisting}
+	
+	\section{Limitaciones y Advertencias}
+	\begin{itemize}
+		\item \textbf{Periodo Corto:} El método de cuadrados medios tiende a tener ciclos cortos comparado con generadores congruenciales lineales o Mersenne Twister.
+		\item \textbf{Colapso a Cero:} Si en alguna iteración la semilla toma el valor $0$, toda la secuencia subsecuente será $0$.
+		\item \textbf{Precisión Numérica:} R utiliza el estándar IEEE 754 de doble precisión. Para $k > 8$, el valor de $z = \text{seed}^2$ puede exceder $2^{53}$, perdiendo precisión en los dígitos enteros y comprometiendo la aleatoriedad.
+	\end{itemize}
+	
+\end{document}

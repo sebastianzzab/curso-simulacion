@@ -1,0 +1,171 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+
+% Configuración de márgenes
+\geometry{
+	left=2.5cm,
+	right=2.5cm,
+	top=2.5cm,
+	bottom=2.5cm
+}
+
+
+\begin{document}
+	
+	\begin{titlepage}
+		\centering
+		\normalsize % Asegura tamaño 12 en portada
+		
+		% --- LOGO ---
+		\includegraphics[width=3cm]{logo.png} 
+		
+		\vspace{0.5cm}
+		
+		% --- ENCABEZADO INSTITUCIONAL ---
+		UNIVERSIDAD DE ORIENTE \\
+		NÚCLEO DE NUEVA ESPARTA \\
+		ESCUELA DE INGENIERÍA Y CIENCIAS APLICADAS \\
+		DEPARTAMENTO DE ESTADÍSTICA \\
+		
+		\vspace{3.5cm} 
+		
+		% --- TÍTULO ---
+		\textbf{MÉTODO DE ACEPTACIÓN Y RECHAZO: EJERCICIO PROPUESTO} \\
+		
+		\vspace{3cm} 
+		
+		% --- AUTORES ---
+		Presentado por: \\
+		\vspace{0.5cm}
+		
+		Rios Luis C.I: 31.455.622 \\
+		Villarroel Rosmaurys C.I: 31.241.417 \\
+		Zabala Sebastian C.I: 30.277.517 \\
+		Valerio Valeria C.I: 30.141.916 \\
+		
+		\vspace{1.5cm} 
+		
+		% --- INFORMACIÓN DEL CURSO ---
+		Al curso de Simulación (2205393) \\
+		Sección 0620 \\
+		
+		\vspace{0.5cm}
+		
+		% --- PROFESOR ---
+		Prof. Oswaldo Bello \\
+		
+		\vfill 
+		
+		% --- FECHA Y LUGAR ---
+		Guatamare, Diciembre de 2025
+		
+	\end{titlepage}
+	
+	\section{Planteamiento del Problema}
+	
+	Se desea generar valores aleatorios que sigan la función de densidad de probabilidad $f(x)$ definida por:
+	
+	\begin{equation}
+		f(x) = 
+		\begin{cases} 
+			\frac{1}{16} (3x^2 + 2x + 2) & \text{si } 0 \leq x \leq 2 \\
+			0 & \text{en otro caso}
+		\end{cases}
+	\end{equation}
+	
+	Para ello, se utilizará el método de aceptación y rechazo, analizando posteriormente la eficiencia del algoritmo resultante.
+	
+	\section{Desarrollo del Método}
+	
+	El método de aceptación y rechazo requiere determinar una función de densidad auxiliar $g(x)$ que acote a $f(x)$ mediante una constante $c$, de tal forma que $c \cdot g(x) \geq f(x)$ para todo $x$ en el dominio. A continuación, se detallan los pasos lógicos para la construcción del algoritmo.
+	
+	\subsection{Selección de la función auxiliar $g(x)$}
+	
+	Dado que el dominio de $f(x)$ es el intervalo finito $[0, 2]$, la elección más natural y computacionalmente eficiente para la densidad instrumental es la distribución Uniforme en dicho intervalo, denotada como $U(0, 2)$.
+	
+	La función de densidad de la uniforme es:
+	\begin{equation}
+		g(x) = \frac{1}{2-0} = \frac{1}{2}, \quad \text{para } 0 \leq x \leq 2
+	\end{equation}
+	
+	Para simular una variable aleatoria $Y$ con esta densidad a partir de un número aleatorio estándar $R \sim U(0,1)$, utilizamos la transformación lineal:
+	\[ Y = 0 + (2-0)R = 2R \]
+	
+	\subsection{Cálculo de la constante de mayoración $c$}
+	
+	Debemos encontrar el valor óptimo de $c$ (el menor posible que cumpla la condición) para maximizar la eficiencia. Esto implica hallar el máximo de la razón entre las funciones:
+	
+	\begin{equation}
+		\frac{f(x)}{g(x)} = \frac{\frac{1}{16}(3x^2 + 2x + 2)}{\frac{1}{2}} = \frac{2}{16}(3x^2 + 2x + 2) = \frac{1}{8}(3x^2 + 2x + 2)
+	\end{equation}
+	
+	Sea $h(x) = \frac{1}{8}(3x^2 + 2x + 2)$. Para encontrar su máximo en el intervalo $[0, 2]$, analizamos su comportamiento. Dado que los coeficientes $x^2$ y $x$ son positivos, la función es una parábola convexa estrictamente creciente en el intervalo positivo. Por ende, el máximo se encuentra en el límite superior del intervalo, es decir, en $x = 2$.
+	
+	Evaluando en $x = 2$:
+	\begin{equation}
+		\max_{0 \leq x \leq 2} \left( \frac{f(x)}{g(x)} \right) = \frac{1}{8}(3(2)^2 + 2(2) + 2) = \frac{1}{8}(12 + 4 + 2) = \frac{18}{8} = \frac{9}{4}
+	\end{equation}
+	
+	Por lo tanto, la constante óptima es:
+	\begin{equation}
+		c = 2.25
+	\end{equation}
+	
+	\subsection{Criterio de Aceptación}
+	
+	El criterio general establece que debemos aceptar el candidato $Y$ si un número aleatorio auxiliar $U \sim U(0,1)$ cumple:
+	\[ U \leq \frac{f(Y)}{c \cdot g(Y)} \]
+	
+	Sustituyendo los valores calculados:
+	\begin{equation}
+		\frac{f(Y)}{c \cdot g(Y)} = \frac{1}{c} \left( \frac{f(Y)}{g(Y)} \right) = \frac{4}{9} \left[ \frac{1}{8}(3Y^2 + 2Y + 2) \right]
+	\end{equation}
+	
+	Simplificando la expresión:
+	\begin{equation}
+		\frac{4}{9 \cdot 8} (3Y^2 + 2Y + 2) = \frac{1}{18} (3Y^2 + 2Y + 2)
+	\end{equation}
+	
+	\section{Algoritmo Resultante}
+	
+	Basándonos en el análisis anterior, el algoritmo para simular la variable aleatoria $X$ es el siguiente:
+	
+	\begin{enumerate}
+		\item \textbf{Generación:} Generar dos números aleatorios independientes $R_1$ y $R_2$ provenientes de una distribución Uniforme $(0, 1)$.
+		\item \textbf{Transformación:} Calcular el valor candidato $Y$ distribuido uniformemente en $[0, 2]$:
+		\[ Y = 2 \cdot R_1 \]
+		\item \textbf{Evaluación:} Verificar la condición de aceptación:
+		\[ \text{¿Es } R_2 \leq \frac{3Y^2 + 2Y + 2}{18} \text{?} \]
+		\item \textbf{Decisión:}
+		\begin{itemize}
+			\item Si la condición es \textbf{Verdadera}: Aceptar $Y$. Hacer $X = Y$ y terminar.
+			\item Si la condición es \textbf{Falsa}: Rechazar $Y$ y volver al paso 1.
+		\end{itemize}
+	\end{enumerate}
+	
+	\section{Estudio de la Eficiencia}
+	
+	La eficiencia del método de aceptación y rechazo está inversamente relacionada con la constante $c$.
+	
+	\subsection{Probabilidad de Aceptación ($P_A$)}
+	La probabilidad de que un par de números aleatorios genere un valor aceptado en una iteración es:
+	\begin{equation}
+		P_A = \frac{1}{c} = \frac{1}{2.25} = \frac{4}{9} \approx 0.4444
+	\end{equation}
+	Esto indica que, aproximadamente, el $44.44\%$ de los candidatos generados serán aceptados.
+	
+	\subsection{Costo Computacional Esperado}
+	El número de iteraciones necesarias para generar un valor exitoso sigue una distribución geométrica con media $c$.
+	\begin{equation}
+		E[\text{Iteraciones}] = c = 2.25
+	\end{equation}
+	
+	En promedio, el algoritmo debe ejecutarse 2.25 veces (consumiendo 4.5 números aleatorios uniformes) para producir un solo valor de la variable aleatoria $X$. Si bien no es altamente eficiente debido a la forma convexa de $f(x)$ comparada con la forma plana de $g(x)$, el costo computacional por iteración es bajo dado que solo implica operaciones aritméticas básicas.
+	
+\end{document}

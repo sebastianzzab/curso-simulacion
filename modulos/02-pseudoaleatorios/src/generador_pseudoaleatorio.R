@@ -105,7 +105,7 @@ cuadrados_medios <- function(n, semilla, k = 4) {
   
   for (i in 1:n) {
     cuadrado <- x^2
-    cuadrado_str <- sprintf(paste0("%0", 2 * k, "d"), cuadrado)
+    cuadrado_str <- sprintf(paste0("%f", 2 * k, "d"), cuadrado)
     inicio <- floor((nchar(cuadrado_str) - k) / 2) + 1
     x_str <- substr(cuadrado_str, inicio, inicio + k - 1)
     x <- as.integer(x_str)
@@ -116,11 +116,11 @@ cuadrados_medios <- function(n, semilla, k = 4) {
 }
 
 # Ejemplo de uso
-semilla <- 1234  # Debe tener 4 dígitos
-n <- 10          # Cantidad de números a generar
+semilla <- 123456  # Debe tener 4 dígitos
+n <- 100          # Cantidad de números a generar
 
-k <- 4
-numeros <- cuadrados_medios(n, semilla)
+k <- 6
+numeros <- cuadrados_medios(n, semilla, k =6)
 print(numeros)
 
 ############################################################# Prueba de Póker https://github.com/MarceParra/ModelosMatematicosChapter03/blob/main/07PruebaIndependencia_Poker.R

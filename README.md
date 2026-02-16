@@ -8,14 +8,14 @@ Este repositorio contiene materiales, notas, ejercicios y recursos utilizados en
 
 | Carpeta / Archivo | Descripción |
 |------------------|-------------|
-| `01_introduction_to_simulation/` | Introducción a la simulación: conceptos básicos, ejemplos iniciales y motivación. |
-| `02_generacion_numeros_pseudoaleatorios/` | Generación de números pseudoaleatorios: técnicas, algoritmos y ejemplos prácticos. |
-| `evaluaciones/` | Ejercicios, tareas y evaluaciones relacionadas con el curso. |
-| `imagenes/` | Imágenes utilizadas dentro de los documentos o presentaciones. |
-| `libros/` | Material bibliográfico de apoyo, libros y referencias recomendadas. |
-| `fijar_semilla_R_corregido.tex` / `.pdf` | Documento sobre cómo fijar la semilla en R para garantizar reproducibilidad. |
-| `generacion_numeros_pseudoaleatorios.tex` | Desarrollo teórico sobre la generación de números pseudoaleatorios. |
-| `sample.tex` / `sample.pdf` | Plantilla base para la creación de documentos en LaTeX. |
+| `modulos/01-introduccion/` | Introducción a la simulación: conceptos básicos, ejemplos iniciales y motivación. |
+| `modulos/02-pseudoaleatorios/` | Generación de números pseudoaleatorios: técnicas, algoritmos y ejemplos prácticos. |
+| `modulos/evaluaciones/` | Ejercicios, tareas y evaluaciones relacionadas con el curso. |
+| `recursos/imagenes/` | Imágenes utilizadas dentro de los documentos o presentaciones. |
+| `recursos/bibliografia/` | Material bibliográfico de apoyo, libros y referencias recomendadas. |
+| `temas-suplementarios/fijar_semilla_R/` | Documento sobre cómo fijar la semilla en R para garantizar reproducibilidad. |
+| `modulos/02-pseudoaleatorios/src/generacion_numeros_pseudoaleatorios.tex` | Desarrollo teórico sobre la generación de números pseudoaleatorios. |
+| `plantillas/` | Plantillas base para la creación de documentos en LaTeX. |
 
 ---
 

@@ -1,0 +1,582 @@
+---
+title: "Simulación de Variables Aleatorias: Distribución Beta"
+subtitle: "Método de Aceptación y Rechazo y Pruebas de Bondad de Ajuste"
+author: ["Luis Ríos", "Sebastian Zabala"]
+format: 
+  html:
+    toc: true
+    toc-depth: 2
+    self-contained: true
+    code-fold: true
+    include-in-header:
+      text: |
+        <style>
+        body {
+          text-align: justify;
+        }
+        p {
+          text-align: justify;
+        }
+        li {
+          text-align: justify;
+        }
+        </style>
+editor: visual
+lang: es
+---
+
+# 1. Introducción y Definición de Parámetros
+
+En este trabajo se realiza la simulación de una variable aleatoria continua con distribución **Beta**. Se generarán 100 conjuntos de datos (simulaciones), cada uno compuesto por 100 números aleatorios.
+
+Se ha seleccionado la distribución **Beta(**$\alpha, \beta$) debido a su dominio acotado en $[0,1]$, lo cual facilita la implementación del método de Aceptación y Rechazo utilizando una distribución Uniforme como auxiliar.
+
+## 1.1 Parámetros de la Distribución
+
+Para este experimento, hemos fijado los siguientes parámetros para garantizar una forma de campana asimétrica:
+
+-   $\alpha$ (alpha): 2
+-   $\beta$ (beta): 4
+
+A partir de estos valores, calculamos la media y la varianza teórica poblacional, necesarias para las pruebas estadísticas posteriores (específicamente la prueba Z).
+
+La fórmula para calcular la media de una variable aleatoria con distribución beta es la siguiente:
+
+$$
+\begin{equation}
+\frac{\alpha}{\alpha+\beta}
+\end{equation}
+$$
+
+Por otro lado, la fórmula para calcular la varianza de una de una variable aleatoria con distribution beta es la siguiente:
+
+$$
+\begin{equation}
+\frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}
+\end{equation}
+$$
+
+Se calculan la media y varianza teórica sustiyendo los valores de alpha y beta utilizando el siguiente script de [R]{style="color: blue;"}:
+
+```{r}
+#| label: parametros
+#| echo: true
+
+# 1. PARÁMETROS DE LA DISTRIBUCIÓN
+alpha_param <- 2   
+beta_param  <- 4   
+
+n_nums <- 100      # Tamaño de la muestra (n)
+n_sims <- 100      # Cantidad de simulaciones
+
+# CÁLCULOS TEÓRICOS POBLACIONALES
+# Media = a / (a + b)
+media_teorica <- alpha_param / (alpha_param + beta_param)
+
+# Varianza = (a * b) / ( (a + b)^2 * (a + b + 1) )
+var_teorica <- (alpha_param * beta_param) / 
+               ((alpha_param + beta_param)^2 * (alpha_param + beta_param + 1))
+
+# Desviación Estándar
+desv_std_teorica <- sqrt(var_teorica)
+
+cat("Media Teórica:", round(media_teorica, 4), "\n")
+cat("Desv. Estándar Teórica:", round(desv_std_teorica, 4))
+```
+
+Como se puede observar, la media y desviación estándar teórica es de 0,3333 y 0,1782, respectivamente.
+
+# 2. Metodología: Aceptación y Rechazo
+
+**Idea general del método:** El método de Aceptación y Rechazo permite generar variables aleatorias con función de densidad $f(x)$ usando una variable auxiliar con densidad $g(x)$ y una constante $c$ tal que $f(x) \leq c⋅g(x$) para todo $x$. De acuerdo a esto, se tienen los siguientes elementos para nuestra simulación:
+
+-   Función Objetivo $f(x)$: Densidad $Beta(2, 4)$.
+
+-   Función Propuesta $g(x)$: Densidad $U(0, 1)$.
+
+-   Cálculo de c : Se obtiene evaluando en la moda de la distribución $Beta$ para maximizar la eficiencia.
+
+Se recuerda que la moda de una variable aleatoria beta es la siguiente:
+
+$$
+\begin{equation}
+\frac{\alpha - 1}{\alpha + \beta - 2}
+\end{equation}
+$$
+
+En el siguiente script de [R]{style="color: blue;"} se definen las funciones $f(x)$, $g(x)$ y se calcula el valor de $c$.
+
+```{r}
+#| label: funciones-base
+#| echo: true
+
+# Definición de f(x) y g(x)
+f <- function(x) { dbeta(x, shape1 = alpha_param, shape2 = beta_param) }
+g <- function(x) { dunif(x, min = 0, max = 1) }
+
+# Cálculo de la constante c (Maximizacion)
+moda <- (alpha_param - 1) / (alpha_param + beta_param - 2)
+c_val <- f(moda) / g(moda) 
+
+# Función del Algoritmo
+generar_aceptacion_rechazo <- function(n) {
+  aceptados <- numeric(n)
+  count <- 0
+  iteraciones_totales <- 0
+  while(count < n) {
+    iteraciones_totales <- iteraciones_totales + 1
+    # 1. Generar R1 de g(x) -> Uniforme(0,1)
+    r1 <- runif(1) 
+    # 2. Generar R2 de Uniforme(0,1) para el criterio
+    r2 <- runif(1)
+    
+    # 3. Criterio de aceptación
+    if (r2 <= f(r1) / (c_val * g(r1))) {
+      count <- count + 1
+      aceptados[count] <- r1
+    }
+  }
+  # cat("Total iteraciones para conseguir", n, "muestras", iteraciones_totales, "\n")
+  return(aceptados)
+}
+```
+
+De igual manera, se define una función que retorna los números pseudoaletorios para la distribución beta, llamada `generar_aceptacion_rechazo(n)`.
+
+# 3. Ejecución de la Simulación
+
+A continuación, se generan las 100 simulaciones de tamaño 100 con una semilla de 123 mediante `seed(123)`:
+
+```{r}
+#| label: ejecucion-simulacion
+#| echo: true
+
+set.seed(123) # Semilla para reproducibilidad
+resultados <- matrix(NA, nrow = n_sims, ncol = n_nums)
+
+for(i in 1:n_sims) {
+  resultados[i, ] <- generar_aceptacion_rechazo(n_nums)
+}
+```
+
+Se crea una matriz llamada $resultados_{100x100}$ para alojar a todos los números simulados. Esta inicialmente contiene NAs pero luego se va llenando en la medida en que se van aceptando valores a través del uso de la función `generar_aceptacion_rechazo().`
+
+# 4. Pruebas de Bondad de Ajuste
+
+Para validar los números generados, sometemos cada una de las 100 simulaciones a una batería de pruebas estadísticas con un nivel de confianza del 90% $(\alpha=0.10)$, 95% $(\alpha=0.05)$ y 99% $(\alpha=0.01)$.
+
+Los p-valores obtenidos en cada simulación se comparan posteriormente con los niveles de significancia establecidos para determinar la proporción de rechazos empíricos.
+
+## 4.1 Pruebas Estadísticas Aplicadas
+
+Se aplican las siguientes pruebas:
+
+-   **Prueba de Medias (Z-Test)**: Contrasta si la media muestral difiere significativamente de la media teórica bajo el supuesto de normalidad asintótica (Teorema Central del Límite). $$
+      \begin{align*}
+    H_0 &: \mu = \mu_{\text{teórica}} \\
+    H_1 &: \mu \neq \mu_{\text{teórica}} 
+    \end{align*}
+      $$ En nuestro caso: $$
+    \begin{align*}
+    H_0 &: \mu = 0.3333 \\
+    H_1 &: \mu \neq 0.3333
+    \end{align*}
+    $$
+
+Donde $\mu$ representa la media poblacional de la distribución Beta(2,4)..
+
+El estadístico utilizado es: $$
+\begin{equation}
+Z = \frac{\bar{X} - \mu_{\text{teórica}}}{ \sigma / \sqrt{n}}
+\end{equation}
+$$ Regla de decisión: Se rechaza $H_0$ si $|Z| > z_{1-\alpha/2}$, equivalentemente si el p-valor $< \alpha$.
+
+-   **Kolmogorov-Smirnov (KS)**: Evalúa si la función de distribución empírica difiere significativamente de la función de distribución acumulada teórica especificada. $$
+      \begin{align*}
+    H_0 &: F(x) = F_{Beta(\alpha, \beta)}(x) \\
+    H_1 &: F(x) \neq F_{Beta(\alpha, \beta)}(x) 
+    \end{align*}
+      $$ En nuestro caso: $$
+      \begin{align*}
+    H_0 &: F(x) = F_{Beta(2, 4)}(x) \\
+    H_1 &: F(x) \neq F_{Beta(2, 4)}(x)
+    \end{align*}
+    $$
+
+Regla de decisión: Se rechaza $H_0$ si el estadístico KS excede el valor crítico correspondiente o si el p-valor $< \alpha$.
+
+-   **Prueba de Ljung-Box**: Contrasta si las autocorrelaciones muestrales hasta un rezago $k$ son conjuntamente iguales a cero, evaluando independencia serial. $$
+      \begin{align*}
+    H_0 &: \rho_1 = \rho_2 = \dots = \rho_k = 0  \\
+    H_1 &: \exists j \text{ tal que } \rho_j \neq 0 
+    \end{align*}
+      $$ Regla de decisión: Se rechaza $H_0$ si el estadístico $Q$ supera el valor crítico $\chi^2_{k,,1-\alpha}$ o si el p-valor $< \alpha$.
+
+-   **Método Bootstrap para la varianza**: Evalúa si la varianza poblacional coincide con la varianza teórica utilizando la distribución empírica bootstrap para estimar su variabilidad. $$
+    \begin{align*}
+      H_0 &: \sigma^2 = \sigma^2_{teorica}\\
+      H_1 &: \sigma^2 \neq \sigma^2_{teórica}
+    \end{align*}
+    $$ Luego, la regla de decisión se basa en el intervalo de confianza bootstrap:
+
+-   Si $\sigma^2_{\text{teórica}} \in IC_{1-\alpha}^{boot}$ → No se rechaza $H_0$.
+
+-   Si $\sigma^2_{\text{teórica}} \notin IC_{1-\alpha}^{boot}$ → Se rechaza $H_0$.
+
+En la implementación se utilizaron $B = 2000$ remuestreos bootstrap y se construyó un intervalo de confianza tipo BCa (Bias-Corrected and Accelerated). Este método corrige el sesgo y ajusta la asimetría de la distribución bootstrap, proporcionando intervalos más precisos cuando el estimador no es simétrico.
+
+### 4.1.1 Justificación del uso del estadistico Z
+
+Se aplica el estadístico Z por el Teorema Ceorema Central. El cual establece que la distribución de la media muestral se aproxima a una distribución normal a medida que el tamaño de la muestra aumenta, independientemente de la forma de la distribución original. En este caso, con n=100, se espera que la media muestral siga una distribución normal, lo que justifica el uso del estadístico Z para evaluar si la media muestral se desvía significativamente de la media teórica.
+
+En el siguiente script de [R]{style="color: blue;"} se calcula la media muestral para cada una de las 100 simulaciones y se realiza un histograma de las medias muestrales para visualizar su distribución, superponiendo la curva normal teórica según el TCL y una línea vertical indicando la media teórica poblacional:
+
+```{r}
+#| label: fig-validacion-tcl
+#| fig-cap: "Validación del Teorema Central del Límite (TCL) para las Medias Muestrales de las Simulaciones."
+#| echo: true
+#| warning: false
+
+# 1. Calcular las medias de cada una de las simulaciones
+# Opción eficiente: rowMeans calcula la media de cada fila (cada simulación)
+medias_muestrales <- rowMeans(resultados)
+
+# Con bucle for, sería así:
+# medias_muestrales <- numeric(n_sims)
+# for(i in 1:n_sims) {
+#   medias_muestrales[i] <- mean(resultados[i, ])
+# }
+
+# 2. Generar el Histograma de las MEDIAS
+hist(medias_muestrales, 
+     main = paste("Validación TCL: Histograma de", n_sims, "Medias Muestrales"),
+     xlab = "Valor de la Media Muestral",
+     border = "white",
+     col = "skyblue",
+     freq = FALSE, # Importante: Densidad para comparar con la curva
+     breaks = 15   
+)
+
+# 3. Superponer la Curva Normal Teórica
+# El error estándar es la desviación de la población dividido por raíz de n
+error_estandar <- desv_std_teorica / sqrt(n_nums)
+
+# Graficamos la Normal centrada en la media teórica de la Beta
+curve(dnorm(x, mean = media_teorica, sd = error_estandar), 
+      col = "red", lwd = 2, add = TRUE)
+
+# 4. Línea de la media teórica (referencia visual)
+abline(v = media_teorica, col = "darkblue", lwd = 2, lty = 2)
+
+legend("topright", 
+       legend = c("Medias Simuladas", "Normal Teórica (TCL)", "Media Poblacional"),
+       fill = c("skyblue", NA, NA), 
+       border = c("white", NA, NA), 
+       col = c(NA, "red", "darkblue"), 
+       lty = c(NA, 1, 2), 
+       lwd = c(NA, 2, 2))
+```
+
+Como se puede observar en la figura anterior, las medias muestrales se distribuyen alrededor de la media teórica poblacional (línea azul punteada) y la forma del histograma se asemeja a una campana de Gauss, lo cual es consistente con el Teorema Central del Límite. Esto justifica el uso del estadístico Z para la media muestral.
+
+### 4.1.2 Justificación del Método Bootstrap para la Varianza
+
+Para la validación de la dispersión de los datos, se evaluaron dos enfoques posibles. El primero consistía en aplicar la prueba de Chi-cuadrado sobre las medias muestrales ($\bar{X}$), aprovechando que estas convergen a una distribución Normal por el Teorema del Límite Central. Sin embargo, este enfoque valida la precisión del estimador (el error estándar, $\sigma^2/n$) y no necesariamente la estructura de varianza intrínseca de la población generada ($\sigma^2$). Es teóricamente posible que un generador defectuoso produzca medias estables que pasen una prueba de Chi-cuadrado, aun si la distribución subyacente no respeta la forma Beta.
+
+Por esta razón, se optó por el segundo enfoque: validar la varianza de los datos originales ($X \sim Beta$) mediante el método Bootstrap. Dado que la distribución original es acotada y asimétrica (no normal), el Bootstrap (Efron, 1979) permite construir intervalos de confianza robustos para $\sigma^2$ sin depender de supuestos de normalidad asintótica que no aplican a la población base. De esta forma, se garantiza que el generador replica fielmente la dispersión teórica de la distribución Beta y no solo la convergencia de sus promedios. En ese sentido, esto permite contrastar si la varianza teórica poblacional se encuentra contenida dentro del intervalo de confianza generado a partir de la simulación, proporcionando una validación robusta de los resultados.
+
+## 4.2 Ejecución de las Pruebas
+
+La prueba de media, Kolmogorov-Smirnov y Ljung Box se aplican en el siguiente script de [R]{style="color: blue;"}:
+
+```{r}
+#| label: pruebas-estadisticas
+#| echo: true
+#| warning: false
+
+# ==============================================================================
+# 1. PREPARACIÓN DE ALMACENAMIENTO
+# ==============================================================================
+# Matriz para guardar los p-valores de cada prueba en cada simulación
+# Filas = simulaciones, Columnas = pruebas
+p_values_log <- data.frame(
+  Z_Test_Promedios = numeric(n_sims),
+  KS_Test          = numeric(n_sims),
+  Box_Ljung        = numeric(n_sims)
+)
+
+# ==============================================================================
+# 2. BUCLE DE PRUEBAS
+# ==============================================================================
+for(i in 1:n_sims) {
+  datos <- resultados[i, ]
+  media_muestral <- mean(datos)
+  
+  # --------------------------------------------------------
+  # A. PRUEBA Z (Promedios con Varianza Conocida)
+  # --------------------------------------------------------
+  # H0: mu_muestral = mu_teorica
+  z_stat <- (media_muestral - media_teorica) / (desv_std_teorica / sqrt(n_nums))
+  p_val_z <- 2 * (1 - pnorm(abs(z_stat))) # P-valor Bilateral
+  
+  # --------------------------------------------------------
+  # B. PRUEBA KOLMOGOROV-SMIRNOV (KS)
+  # --------------------------------------------------------
+  # H0: Los datos siguen la distribución Beta(alpha, beta)
+  test_ks <- ks.test(datos, "pbeta", alpha_param, beta_param)
+  
+  # --------------------------------------------------------
+  # C. PRUEBA BOX-LJUNG (Independencia)
+  # --------------------------------------------------------
+  # H0: Los datos son independientes (ruido blanco)
+  # Lag sugerido: log(n) o 10. Para n=100, 10 está bien.
+  test_box <- Box.test(datos, lag = 10, type = "Ljung-Box")
+  
+  # --------------------------------------------------------
+  # ALMACENAMIENTO
+  # --------------------------------------------------------
+  p_values_log$Z_Test_Promedios[i] <- p_val_z
+  p_values_log$KS_Test[i]          <- test_ks$p.value
+  p_values_log$Box_Ljung[i]        <- test_box$p.value
+}
+
+```
+
+En el siguiente script de [R]{style="color: blue;"} se realiza la prueba de varianza mediante bootstrap:
+
+```{r}
+#| echo: true
+#| warning: false
+#| label: prueba-bootstrap-varianza
+# ==============================================================================
+# PRUEBA DE VARIANZA MEDIANTE BOOTSTRAP
+# ==============================================================================
+library(boot)
+
+# 1. Función estadística para el bootstrap
+var_fun <- function(data, indices) {
+  return(var(data[indices]))
+}
+
+# 2. Ejecutar bootstrap (1000 réplicas es estándar, 2000 es mejor para publicación)
+set.seed(123)
+boot_results <- boot(data = datos, statistic = var_fun, R = 2000)
+
+# 3. Calcular intervalo de confianza (BCa es ideal para asimetría como la Beta)
+ci <- boot.ci(boot_results, type = "bca")
+
+# 4. Extracción de los límites del intervalo
+# La estructura de 'ci' en boot es una lista. El índice 4 y 5 del objeto 'bca' son los límites.
+limite_inferior <- ci$bca[4]
+limite_superior <- ci$bca[5]
+
+# 5. Imprimir Resultados y Decisión Automática
+cat("\n--- RESULTADOS BOOTSTRAP PARA LA VARIANZA ---\n")
+cat("Varianza Teórica (Beta):", var_teorica, "\n")
+cat("Intervalo de Confianza BCa (95%): [", round(limite_inferior, 5), ", ", round(limite_superior, 5), "]\n")
+
+if (var_teorica >= limite_inferior && var_teorica <= limite_superior) {
+  cat("DECISIÓN: NO SE RECHAZA la varianza teórica.\n")
+  cat("CONCLUSIÓN: La varianza de los datos simulados es consistente con la teoría.\n")
+} else {
+  cat("DECISIÓN: SE RECHAZA la varianza teórica.\n") # (Esto sería raro si tu generador está bien)
+}
+```
+
+Se complementa lo anterior con el histograma de las varianzas simuladas y un gráfico Q-Q Normal en el siguiente script de [R]{style="color: blue;"}:
+
+```{r}
+#| echo: true
+#| warning: false
+#| label: fig-grafico-diagnostico-bootstrap
+#| fig-cap: "Gráfico diagnóstico del método Bootstrap para la varianza muestral. El histograma muestra la distribución de las varianzas simuladas, con una línea vertical roja indicando la varianza teórica poblacional."
+
+# Extraer los valores simulados de varianza
+# boot_results$t contiene la matriz de resultados (R x 1)
+varianzas_simuladas <- boot_results$t[,1] 
+
+# Configurar el área de gráfico: 1 fila, 2 columnas 
+par(mfrow = c(1, 2)) 
+
+hist(varianzas_simuladas, 
+     main = "Distribución Bootstrap de la Varianza", # Título limpio
+     xlab = "Varianza Muestral",
+     ylab = "Frecuencia",
+     col = "gray80", 
+     border = "white",
+     breaks = 30) # Más barras para mejor detalle
+
+abline(v = var_teorica, col = "red", lwd = 2, lty = 2)
+
+# Leyenda (opcional, ajustada para que no tape datos)
+legend("topright", legend = c("Simulación", "Varianza Teórica"),
+       fill = c("gray80", NA), border = c("white", NA),
+       col = c(NA, "red"), lty = c(NA, 2), lwd = c(NA, 2),
+       bty = "n", cex = 0.8)
+
+# Sirve para justificar la normalidad (o falta de ella)
+qqnorm(varianzas_simuladas, 
+       main = "Gráfico Q-Q Normal",
+       xlab = "Cuantiles Teóricos",
+       ylab = "Cuantiles de la Muestra",
+       pch = 20, col = "darkblue") # Puntos sólidos azules
+
+qqline(varianzas_simuladas, col = "red", lwd = 2) # Línea de referencia normal
+
+# 3. Restaurar configuración original de gráficos
+par(mfrow = c(1, 1))
+```
+
+En el gráfico anterior, se observa que la varianza teórica (línea roja punteada) se encuentra dentro de la distribución de varianzas simuladas, lo que sugiere que no se rechaza la hipótesis de que la varianza de los datos simulados es consistente con la teoría. Por otro lado, el gráfico Q-Q Normal (derecha) muestra un ajuste casi lineal de los cuantiles, lo que indica que, para un tamaño de muestra $n=100$, el estimador de la varianza se comporta asintóticamente normal.Sin embargo, es importante notar que el intervalo de confianza Bootstrap (BCa) es más confiable que uno paramétrico tradicional, ya que no asume esta normalidad de antemano, sino que la construye a partir de los propios datos simulados. El hecho de que la varianza teórica (línea roja discontinua) se ubique cerca del centro de la distribución confirma la insesgadez y consistencia de la simulación.
+
+# 5. Análisis Gráfico para una simulación y Resultados Generales
+
+En esta sección se analizan los gráficos de diagnosticos usuales y se culmina con los resultados generales obtenidos con los números pseudoaleatorios generados de la distribución $Beta(\alpha=2, \beta=4)$.
+
+# 5.1 Gráficos de Diagnóstico
+
+Se presentan los gráficos correspondientes a la última simulación realizada para visualizar el comportamiento de los datos.
+
+```{r}
+#| label: fig-histograma
+#| echo: true
+#| fig-width: 10
+#| fig-height: 8
+#| fig-cap: "Histograma de los datos contra la distribución de una beta con esos parámetros."
+
+datos_grafico <- resultados[n_sims, ]
+
+# Histograma vs Densidad Teórica
+hist(datos_grafico, freq=FALSE, main="Histograma vs Beta Teórica", 
+     xlab="Valores", col="lightblue", xlim=c(0,1), las=1)
+curve(dbeta(x, alpha_param, beta_param), add=TRUE, col="red", lwd=2)
+legend("topright", legend=c("Simulado", "Teórico"), col=c("lightblue", "red"), lwd=2, bty="n")
+```
+
+Se observa que existe un buen ajuste de los datos simulados a la distribución teórica, aunque se nota una ligera desviación en la cola derecha, lo cual es consistente con la asimetría de la distribución $Beta(2,4)$.
+
+```{r}
+#| label: fig-acf
+#| echo: true
+#| fig-cap: "Gráfico de Autocorrelación (ACF) de la última simulación. Las líneas punteadas azules indican los límites de confianza del 95% para la hipótesis de independencia (Ruido Blanco)."
+
+
+# par(mfrow=c(2,2)) # Dividir pantalla en 4 paneles
+
+# Gráfico de Autocorrelación
+acf(datos_grafico, main="Autocorrelación (ACF)", col="blue")
+
+# par(mfrow=c(1,1)) # Resetear pantalla
+
+```
+
+No se observan rezagos significativos, lo cual sugiere que los datos no presentan autocorrelación serial y se comportan como ruido blanco.
+
+```{r}
+#| label: fig-grafico-retardado-lag-1
+#| echo: true
+#| fig-cap: "Gráfico de dispersión retardado (Lag Plot) con k=1 para la última simulación. Se compara cada observación $X_t$ contra su inmediata anterior $X_{t-1}$. La dispersión aleatoria sin patrones lineales confirma la falta de autocorrelación serial."
+# Gráfico Retardado (Lag Plot)
+lag.plot(datos_grafico, lags=1, do.lines=FALSE, main="Gráfico Retardado (Lag 1)", diag.col="red")
+```
+
+Los datos se distribuyen de manera aleatoria sin formar patrones lineales, lo cual es consistente con la hipótesis de independencia entre observaciones.
+
+# 5.2 Resultados
+
+A continuación, en la tabla se muestra el resumen de cuántas simulaciones pasaron las pruebas satisfactoriamente:
+
+```{r}
+#| label: tabla-resumen
+#| echo: true
+#| warning: false
+
+library(gt)
+library(dplyr)
+
+# 1. PREPARAR DATOS (Resumen de Aprobados)
+# Creamos un dataframe limpio calculando cuántas pasaron cada nivel
+df_resumen <- data.frame(
+  Prueba = c("Promedios (Z-Test)", 
+             "Kolmogorov-Smirnov", 
+             "Box-Ljung (Indep.)"), 
+  
+  Alpha_0_10 = c(sum(p_values_log$Z_Test_Promedios > 0.10),
+                 sum(p_values_log$KS_Test > 0.10),
+                 sum(p_values_log$Box_Ljung > 0.10)),
+  
+  Alpha_0_05 = c(sum(p_values_log$Z_Test_Promedios > 0.05),
+                 sum(p_values_log$KS_Test > 0.05),
+                 sum(p_values_log$Box_Ljung > 0.05)),
+  
+  Alpha_0_01 = c(sum(p_values_log$Z_Test_Promedios > 0.01),
+                 sum(p_values_log$KS_Test > 0.01),
+                 sum(p_values_log$Box_Ljung > 0.01))
+)
+
+# 2. CREAR TABLA CON ESTILO 'gt'
+df_resumen %>%
+  gt() %>%
+  # --- Encabezado ---
+  tab_header(
+    title = md("**Resultados de las Pruebas de Bondad de Ajuste**"),
+    subtitle = "Conteo de simulaciones que NO rechazan la Hipótesis Nula (H0)"
+  ) %>%
+  
+  # --- Agrupar columnas de Alpha ---
+  tab_spanner(
+    label = "Nivel de Significancia",
+    columns = c(Alpha_0_10, Alpha_0_05, Alpha_0_01)
+  ) %>%
+  
+  # --- Renombrar columnas para que se vean bonitas ---
+  cols_label(
+    Prueba = "Prueba Estadística",
+    Alpha_0_10 = "α = 0.10",
+    Alpha_0_05 = "α = 0.05",
+    Alpha_0_01 = "α = 0.01"
+  ) %>%
+  
+  # --- Alineación y Estilo de Texto ---
+  cols_align(
+    align = "center",
+    columns = c(Alpha_0_10, Alpha_0_05, Alpha_0_01)
+  ) %>%
+  
+  # --- Formato de color condicional (Opcional pero recomendado) ---
+  # Pone en negrita verde si pasaron 95 o más pruebas (Excelente)
+  # Pone en rojo si pasaron menos de 90 (Alerta)
+  data_color(
+    columns = c(Alpha_0_10, Alpha_0_05, Alpha_0_01),
+    method = "numeric",
+    palette = c("red", "white", "green"),
+    domain = c(80, 100) # Rango esperado de simulaciones aprobadas
+  ) %>%
+  
+  # --- Nota al pie ---
+  tab_source_note(
+    source_note = md("*Nota: Se realizaron 100 simulaciones con n=100 cada una. Un conteo alto indica un buen ajuste del generador.*")
+  ) %>%
+  
+  # --- Bordes y tema ---
+  opt_table_lines(extent = "default") %>%
+  tab_options(
+    table.border.top.color = "black",
+    heading.border.bottom.color = "black",
+    column_labels.border.bottom.color = "black"
+  )
+```
+
+Se observa que para las tres pruebas consideradas se tienen buenos resultados, no rechazando en la mayoría de las ocasiones la hipótesis nula, siendo consistentes con la variabilidad muestral esperada.
+
+# 6. Conclusión
+
+El generador de números aleatorios basado en el método de Aceptación y Rechazo ha demostrado ser eficaz para simular la distribución Beta. Las pruebas de bondad de ajuste confirman que los datos generados replican fielmente la estructura teórica:
+
+-   **Conformidad de la Media y Distribución:** Las pruebas Z y Kolmogorov-Smirnov mostraron un desempeño alineado con la esperanza estadística. Específicamente, las tasas de no rechazo de la hipótesis nula coincidieron casi exactamente con los valores esperados $(1-\alpha)$ para los niveles de significancia del 0.05 y 0.01. La ligera desviación observada en la prueba KS al 0.10 (86 simulaciones aceptadas frente a 90 esperadas) se atribuye a la variabilidad estocástica propia de un tamaño de simulación finito ($N=100$), y no a un defecto inherente del generador.
+
+-   **Independencia:** La prueba de Ljung-Box presentó una tasa de rechazo ligeramente superior a la esperada teóricamente (particularmente a $\alpha=0.10$, con 18 rechazos observados frente a 10 esperados). Si bien esto sugiere la presencia de correlaciones espurias leves en algunas series generadas, los resultados a $\alpha=0.01$ (96% de aceptación) indican que el generador mantiene la independencia en la gran mayoría de los casos críticos.
+
+-   **Validación de la Varianza**: Se descartó la prueba Chi-cuadrado por su sensibilidad a la falta de normalidad de la distribución Beta. En su lugar, la validación mediante Bootstrap (intervalos BCa) confirmó que la varianza muestral es consistente con la teórica, respaldada por la normalidad asintótica del estimador evidenciada en los gráficos Q-Q.
+
+**Recomendación Final**: El generador es apto para su uso. Se sugiere, como medida de precaución en aplicaciones de alta sensibilidad, verificar la independencia de las series generadas mediante la prueba de Ljung-Box o aumentar el tamaño de la muestra para diluir posibles autocorrelaciones residuales.
